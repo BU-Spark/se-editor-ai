@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lingofy API Experiment</title>
+    <script type="text/javascript">
+        var lingofy = {};
+        lingofy.settings = {};
+        lingofy.settings.baseUrl = "https://dev.lingofy.com/tansaclient/";
+        lingofy.settings.clientExtenstionJs = "tansa4ClientExtensionSimple.js";
+        lingofy.settings.parentAppId = "NONE"; // Replace with actual ID
+        lingofy.settings.parentAppVersion = "NONE"; // Example version, replace with actual version
+    </script>
+    <!-- the menu to edit text from api -->
+    <script type="text/javascript">
+        function checkAndLoadMenuFromServer(){
+            var tansaLoaderScript = document.getElementById("tansaLoaderScript");
+            if(!tansaLoaderScript){
+                var script = document.createElement('script');
+                script.id = "tansaLoaderScript"; // Ensure to add an ID to the script tag
+                script.src = lingofy.settings.baseUrl + 'initTansaLoader.js' + '?' + new Date().getTime();
+                document.querySelector('head').appendChild(script);
+            }
+            else{
+                tansa4ClientExtension.initMenu();
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Lingofy Text Editing Example</h2>
+    <div>
+        <textarea id="textToLingofy" rows="10" cols="50">Enter text here to experiment with Lingofy...</textarea>
+        <button onclick="checkAndLoadMenuFromServer()">Load Lingofy Menu</button>
+    </div>
+
+</body>
+</html>
