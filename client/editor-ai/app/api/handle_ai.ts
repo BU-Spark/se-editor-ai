@@ -78,6 +78,34 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
     return generatedText;
 };
 
+  export const generateHeadlines = async (documentContent: string): Promise<string | null> => {
+    const question = 'Please generate 3 headline options for the following text. Each headline should be concise (5-10 words) and capture the main point of the article. Present each headline option on a new line.';
+    const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nheadlines:`;
+
+    const res = await textGeneration({
+        accessToken: hfToken,
+        model: modelName,
+        inputs: inputText,
+        parameters: {
+            max_new_tokens: 300,
+            return_full_text: false,
+            temperature: 0.7
+        },
+    });
+
+    const generatedText = res.generated_text;
+    console.log('Generated headlines:', generatedText);
+
+    // Split the generated text into lines and remove any empty lines
+    const headlines = generatedText
+      .split('\n')
+      .map(line => line.trim().replace(/\.$/, '')) // Remove trailing period
+      .filter(line => line.length > 0)
+      .join('\n');
+
+    return headlines;
+  };
+
   export const generateSocialMediaCopy = async (document:string): Promise<string | null> => {
     const randomSeed = Math.random().toString(36).substring(7);
     const inputText = `
@@ -107,5 +135,6 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
   
     return generatedText;
   };
+
 
 

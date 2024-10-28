@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import SuggestionBox from './SuggestionBox';
+
+// Components
 import Filters from './Filters';
 import Chatbot from './Chatbot';
 import SuggestionsContainer from './SuggestionsContainer';
-import { generateSuggestion, generateSummary } from '@/api/handle_ai';
 import SummaryContainer from './SummaryContainer';
+import HeadlinesContainer from './HeadlinesContainer';
+
+// API
+import { generateSuggestion, generateSummary, generateHeadlines } from '@/api/handle_ai';
+
 
 interface AsideProps {
     documentContent: string;
@@ -13,17 +18,23 @@ interface AsideProps {
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) => {
     const [showFilters, setShowFilters] = useState(true);
-    const [showSuggestionContainer, setShowSuggestionContainer] = useState(false);
     const [showChatbot, setShowChatbot] = useState(true);
+    const [activeOption, setActiveOption] = useState<string | null>(null);
+
     const [suggestions, setSuggestions] = useState<Array<{
         header: string;
         content: string;
         incorrectLine: string;
         correctLine: string;
     }>>([]);
+    const [showSuggestionContainer, setShowSuggestionContainer] = useState(false);
+
     const [summary, setSummary] = useState<string | null>(null);
     const [showSummaryContainer, setShowSummaryContainer] = useState(false);
-    const [activeOption, setActiveOption] = useState<string | null>(null);
+
+    const [headlines, setHeadlines] = useState<string | null>(null);
+    const [showHeadlinesContainer, setShowHeadlinesContainer] = useState(false);
+
 
     const handleGrammarCheck = async () => {
         console.log('Performing Grammar/Spell Check...');
@@ -33,24 +44,8 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
         setShowFilters(false);
         setShowSummaryContainer(false);
         setSummary(null);
-    };
-
-    const handleGenerateSources = () => {
-        console.log('Generating New Sources...');
-        setShowSuggestionContainer(false);
-        setSuggestions([]);
-        setShowFilters(false);
-        setShowSummaryContainer(false);
-        setSummary(null);
-    };
-
-    const handleCreateHeadline = () => {
-        console.log('Creating Headline...');
-        setShowSuggestionContainer(false);
-        setSuggestions([]);
-        setShowFilters(false);
-        setShowSummaryContainer(false);
-        setSummary(null);
+        setHeadlines(null);
+        setShowHeadlinesContainer(false);
     };
 
     const handleSummarize = async () => {
@@ -62,6 +57,20 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
         setShowSuggestionContainer(false);
         setSuggestions([]);
         setShowFilters(false);
+        setHeadlines(null);
+        setShowHeadlinesContainer(false);
+    };
+
+    const handleCreateHeadlines = async () => {
+        console.log('Creating Headlines and Subheadings...');
+        const generatedHeadlines = await generateHeadlines(documentContent);
+        setHeadlines(generatedHeadlines);
+        setShowHeadlinesContainer(true);
+        setShowSuggestionContainer(false);
+        setSuggestions([]);
+        setShowFilters(false);
+        setShowSummaryContainer(false);
+        setSummary(null);
     };
 
     const handleOptionClick = (option: string) => {
@@ -86,9 +95,8 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                     setShowAskAI={() => handleOptionClick('chatbot')} 
                     setShowSuggestions={() => handleOptionClick('suggestions')} 
                     onGrammarCheck={handleGrammarCheck}
-                    onGenerateSources={handleGenerateSources}
-                    onCreateHeadline={handleCreateHeadline}
-                    onAPStyleCheck={handleSummarize}
+                    onCreateHeadlines={handleCreateHeadlines}
+                    onSummarize={handleSummarize}
                 />
             ) : (
                 <button onClick={() => handleOptionClick('filters')} className="shadow-md mb-4 px-6 py-1 text-lg border-4 border-brand-red text-brand-red bg-white rounded-xl cursor-pointer transition-all duration-300 ease-in-out hover:bg-brand-red hover:text-white">
@@ -120,6 +128,19 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 ) : (
                     <button onClick={() => setShowSummaryContainer(true)} className="shadow-md mb-4 px-6 py-1 text-lg border-4 border-brand-red text-brand-red bg-white rounded-xl cursor-pointer transition-all duration-300 ease-in-out hover:bg-brand-red hover:text-white">
                         Show Summary
+                    </button>
+                )
+            )}
+
+            {headlines && (
+                showHeadlinesContainer ? (
+                    <HeadlinesContainer 
+                        headlines={headlines} 
+                        onClose={() => setShowHeadlinesContainer(false)}
+                    />
+                ) : (
+                    <button onClick={() => setShowHeadlinesContainer(true)} className="shadow-md mb-4 px-6 py-1 text-lg border-4 border-brand-red text-brand-red bg-white rounded-xl cursor-pointer transition-all duration-300 ease-in-out hover:bg-brand-red hover:text-white">
+                        Show Headlines & Subheadings
                     </button>
                 )
             )}
