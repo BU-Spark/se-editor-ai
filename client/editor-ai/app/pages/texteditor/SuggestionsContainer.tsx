@@ -39,23 +39,23 @@ const SuggestionsContainer: React.FC<SuggestionsContainerProps> = ({
         <button onClick={() => setShowSuggestionContainer(false)}>X</button>
       </div>
       <div>
-        {suggestions ?
-        suggestions.map((suggestion, index) => (
-          <SuggestionBox
-            key={index}
-            documentContent={documentContent}
-            setDocumentContent={setDocumentContent}
-            header={suggestion.header}
-            content={suggestion.content}
-            incorrectLine={suggestion.incorrectLine}
-            correctLine={suggestion.correctLine}
-          />
-        ))
-        : <div >
-            <h1 className='font-newsreader'>No suggestions available</h1>
-        </div>
-    
-    }
+        {suggestions.map((suggestion, index) => (
+          suggestion.header === "Not enough content" ? (
+            <div key={index} className="mt-4">
+              <p className="mt-2">{suggestion.content}</p>
+            </div>
+          ) : (
+            <SuggestionBox
+              key={index}
+              documentContent={documentContent}
+              setDocumentContent={setDocumentContent}
+              header={suggestion.header}
+              content={suggestion.content}
+              incorrectLine={suggestion.incorrectLine}
+              correctLine={suggestion.correctLine}
+            />
+          )
+        ))}
       </div>
     </div>
     </div>
