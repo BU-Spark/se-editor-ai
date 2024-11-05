@@ -37,7 +37,7 @@ const Filters: React.FC<FiltersProps> = ({
                 </div>
             ) : (
                 <div className="flex justify-center mt-4">
-                    <button onClick={handleToggleFilters} className="button-container bg-blue-500 font-poppins custom-border border-4 px-4 py-2 bg-brand-red text-white rounded-r shadow-md">
+                    <button onClick={handleToggleFilters} className="button-container font-poppins custom-border border-4 px-4 py-2 bg-brand-red text-white rounded-r shadow-md">
                         Show Filters
                     </button>
                 </div>
