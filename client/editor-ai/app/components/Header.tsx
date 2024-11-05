@@ -41,41 +41,39 @@ const Header = () => {
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
 
       <nav className='bg-white font-lg fixed w-full z-20 top-0 start-0 border-b py-1 font-newsreader scroll-py-0' style={{height: '125px'}}>
-      <div className="mt-4 max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4" style={{ color: '#801212'}}>
-        <h1 style={{ marginLeft:'-40px' }}> <img src="/header.svg"alt="Editor AI Logo"/> </h1>
+      <div className="mt-4 flex items-center justify-between mx-4" style={{ color: '#801212'}}>
+        <div className="flex-shrink-0">
+          <Image 
+            src="/header.svg" 
+            alt="Editor AI Logo" 
+            width={300}
+            height={100}
+            priority
+            className="object-contain"
+          />
+        </div>
 
-
-            {/* user is logged in  */}
-           
-              {/* allowed pages */}                 
-           
-              {user && (
-            <>
-
-              <Navigation />
-              <div className="flex md:justify-end items-center">
+        {user ? (
+          <>
+            <Navigation />
+            <div className="flex items-center">
               <span className="p-4 hidden md:block"> Welcome, {user.displayName} </span>
               <button onClick={handleSignOut} className="text-red bg-brand-tan px-2 py-2 rounded-full hover:bg-red-800 hover:text-white">
-               Log Out
+                Log Out
               </button>
-              </div>
-
-            </>
-            )}
-            <ul> 
-                <li style={{ display: 'inline' }}>
-                </li>
-              </ul>
-            {/* user is not logged in */}
-            {!user && (
-              <ul>
-                <li>
-                  <Link href={"/pages/login"} className='font-bold p-2'>Login</Link>
-                  <Link href={"/pages/signup"}className='font-bold p-2 '>Signup</Link>
-                </li>
-              </ul>
-            )}
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center gap-4">
+            <Link href="/pages/login" className="font-bold hover:text-brand-red">
+              Login
+            </Link>
+            <Link href="/pages/signup" className="font-bold hover:text-brand-red">
+              Signup
+            </Link>
           </div>
+        )}
+      </div>
     </nav>
     </>
     

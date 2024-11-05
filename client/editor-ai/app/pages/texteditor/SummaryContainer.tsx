@@ -6,16 +6,22 @@ interface SummaryContainerProps {
 }
 
 const SummaryContainer: React.FC<SummaryContainerProps> = ({ summary, onClose }) => {
+    
+    const bulletPoints = summary
+        .trim() 
+        .split('\n') 
+        .filter(point => point.trim() !== '');
+
     return (
-        <div className="summary-container p-4 border rounded shadow-md mb-6">
-            <h2 className="text-xl font-bold mb-2">Summary</h2>
-            <p className="mb-4">{summary}</p>
-            <button 
-                onClick={onClose} 
-                className="shadow-md px-6 py-1 text-lg border-4 border-brand-red text-brand-red bg-white rounded-xl cursor-pointer transition-all duration-300 ease-in-out hover:bg-brand-red hover:text-white"
-            >
-                Close
-            </button>
+        <div className="bg-white rounded-lg p-4 mb-4">
+            <div className="flex flex-row justify-between">
+                <h2 className="font-newsreader text-2xl mb-2">Summary</h2>
+            </div>
+            <ul className="list-disc pl-5 mb-4"> 
+                {bulletPoints.map((point, index) => (
+                    <li key={index} className="font-newsreader mb-1">{point}</li> 
+                ))}
+            </ul>
         </div>
     );
 };
