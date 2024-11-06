@@ -10,6 +10,7 @@ import HeadlinesContainer from './HeadlinesContainer';
 // API
 import { generateSuggestion, generateSummary, generateHeadlines } from '@/api/handle_ai';
 
+
 interface AsideProps {
     documentContent: string;
     setDocumentContent: (content: string) => void;
@@ -17,17 +18,21 @@ interface AsideProps {
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) => {
     const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines'>('chat');
+
     const [suggestions, setSuggestions] = useState<Array<{
         header: string;
         content: string;
         incorrectLine: string;
         correctLine: string;
     }>>([]);
+    const [showSuggestionContainer, setShowSuggestionContainer] = useState(false);
+
     const [summary, setSummary] = useState<string | null>(null);
     const [headlines, setHeadlines] = useState<string | null>(null);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [showHeadlinesContainer, setShowHeadlinesContainer] = useState(false);
     const [loading, setLoading] = useState(false);
+
 
     // Grammar/Spell Check
     const handleGrammarCheck = async () => {
@@ -75,6 +80,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                     } rounded-lg transition-colors duration-300`}
                 >
                     Chat
+
                 </button>
                 <button
                     onClick={() => {
@@ -156,6 +162,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                     <HeadlinesContainer headlines={headlines} onClose={() => setShowHeadlinesContainer(false)} />
                 )}
             </div>
+
         </div>
     );
 };
