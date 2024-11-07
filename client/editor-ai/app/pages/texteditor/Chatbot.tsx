@@ -53,48 +53,51 @@ const Chatbot = ({setShowAskAI,documentContent}:ChatbotProps) => {
   };
 
   return (
-    <div className="h-96 flex flex-col bg-white rounded-xl p-4 shadow-md">
-      <div className="flex flex-row justify-between p-2">
-        <h1 className='font-newsreader text-2xl'>Ask EditorAI</h1>
-        <button className="mb-4s" onClick={() => setShowAskAI(false)} >X</button>
-      </div>
-      {messages.length>10 && <button onClick={handleResetConversation} > Reset</button>}
-      <div className="flex-1 overflow-y-auto">
+    <div className="h-[calc(100vh-15rem)]  flex flex-col bg-white rounded-xl p-4">
+      <div className="flex flex-row justify-between">
+                <h2 className="font-newsreader text-2xl mb-2">Ask EditorAI</h2>
+            </div>
+      {messages.length > 10 && <button onClick={handleResetConversation}> Reset</button>}
+      
+      {/* Chat messages container */}
+      <div className="flex-1 overflow-y-auto mb-4 space-y-2">
         {messages.map((message) => (
           message.author === 'editorai' 
-          ?
-            <div key={message.id} className="p-2 mb-2 bg-brand-red rounded-xl shadow text-white poppins-thin">
+          ? (
+            <div key={message.id} className="p-2 bg-brand-red rounded-xl shadow text-white poppins-thin">
               {message.text}
             </div>
-          :
-            <div key={message.id} className="p-2 mb-2 bg-brand-tan text-brand-red rounded-xl shadow text-brand-red poppins-thin">
+          ) : (
+            <div key={message.id} className="p-2 bg-brand-tan text-brand-red rounded-xl shadow poppins-thin">
               {message.text}
             </div>
+          )
         ))}
       </div>
-      
-      <div className="h-10 flex border-brand-red border-2 rounded-xl items-center mt-4 shadow-md rounded-lg poppins-thin" >
+  
+      {/* Input field fixed to the bottom */}
+      <div className="sticky bottom-0 flex border-brand-red border-2 rounded-xl items-center shadow-md poppins-thin bg-white">
         <input
           type="text"
           placeholder="Type your message..."
           value={inputText}
           onChange={handleInputChange}
           className="flex-1 p-2 rounded-xl h-8"
-          style={{outline: 'none', border: 'none' }}
+          style={{ outline: 'none', border: 'none' }}
           onKeyDown={handleKeyDown}
         />
         <button
-        style={{ marginRight: '5px' }}
-  onClick={handleSendMessage}
-  type='button'
-  className="w-8 h-8 bg-brand-red text-white rounded-xl shadow-md flex items-center justify-center overflow-hidden p-1"
->
-  <img src="/chatupload.png" alt="Chat Upload Button" /> 
-</button>
-        
+          onClick={handleSendMessage}
+          type='button'
+          className="w-8 h-8 bg-brand-red text-white rounded-xl shadow-md flex items-center justify-center p-1"
+          style={{ marginRight: '5px' }}
+        >
+          <img src="/chatupload.png" alt="Chat Upload Button" /> 
+        </button>
       </div>
     </div>
   );
+  
 };
 
 export default Chatbot;

@@ -66,10 +66,11 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
   }
 
   export const generateSummary = async (documentContent: string): Promise<string | null> => {
-    if (documentContent.length < 20) {
+        if (documentContent.length < 20) {
         return "No summary available. Write something first.";
     }
-    const question = 'Please provide a concise summary of the following text. The summary should capture the main points and be no more than 3-4 sentences.';
+    const question = 'Please provide a concise summary of the following text. The summary should capture 6 main points and be formatted as bullet points, with each point on a new line. Do not include any leading characters like "-" or any other symbols before the bullet points.';
+
     const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nsummary:`;
 
     const res = await textGeneration({
@@ -82,18 +83,23 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
         },
     });
 
-    const generatedText = res.generated_text;
+    let generatedText = res.generated_text;
 
     console.log('Generated summary:', generatedText);
+
+    generatedText = generatedText.replace(/^\s*-\s*/gm, ''); // remove leading dashes and spaces from each line
+    generatedText = generatedText.replace(/^Generated text:\s*/, ''); // remove any "Generated text:" 
 
     return generatedText;
 };
 
   export const generateHeadlines = async (documentContent: string): Promise<string | null> => {
+
     if (documentContent.length < 20) {
         return "No headlines available. Write something first.";
     }
-    const question = 'Please generate 3 headline options for the following text. Each headline should be concise (5-10 words) and capture the main point of the article. Present each headline option on a new line.';
+    const question = 'Please generate 8 headline options for the following text. Each headline should be concise (5-10 words) and capture the main point of the article. Present each headline option on a new line.';
+
     const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nheadlines:`;
 
     const res = await textGeneration({
@@ -149,6 +155,4 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
   
     return generatedText;
   };
-
-
 

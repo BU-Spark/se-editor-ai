@@ -65,7 +65,7 @@ const SuggestionBox: React.FC<SuggestionBoxProps> = ({
         <div onClick={() => setIsClicked(true)} className="button-container bg-brand-red rounded-lg p-2 m-2 flex-col">
           <div className="flex flex-col">
             <div className="flex flex-row justify-between">
-              <h1 className="font-newsreader text-2xl text-white underline">{header}</h1>
+              <h2 className="font-newsreader text-xl text-white underline">{header}</h2>
             </div>
           </div>
 
