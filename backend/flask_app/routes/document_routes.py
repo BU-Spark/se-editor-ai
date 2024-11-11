@@ -137,3 +137,48 @@ def get_all_documents(userID):
     except Exception as e:
         return handle_server_error(e)
     
+
+
+    
+@bp.route('/updateCategory', methods=['PATCH'])
+@cross_origin()
+def update_document_category():
+    """
+        Updates the category of a document.
+        Input:
+            user_id: The user's id
+            document_id: The ID of the document to update
+            category: The new category to set for the document
+    """
+    try:
+        fireconfig = firestore_service()
+        data = request.json
+
+        # Validate input
+        user_id = data.get("user_id")
+        document_id = data.get("document_id")
+        category = data.get("category")
+
+        if not user_id or not document_id or not category:
+            return handle_bad_request("Missing required fields: user_id, document_id, or category")
+
+        # Define the path to the document
+        collection_route = [
+            (docsOrCollection['c'], "documents"),
+            (docsOrCollection['d'], user_id),
+            (docsOrCollection['c'], "docs")
+        ]
+
+        # Update the document with the new category
+        update_data = {"Category": category}
+        res = fireconfig.update_document(collection_route, document_id, update_data)
+
+        if not res:
+            return handle_server_error("Failed to update document category")
+
+        return handle_success("Category updated successfully")
+
+    except Exception as e:
+        return handle_server_error(str(e))
+
+

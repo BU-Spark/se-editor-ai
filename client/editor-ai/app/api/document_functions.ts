@@ -1,4 +1,3 @@
-
 export const handleCreateDocument = async (userId: string, documentName: string, documentContent: string) => {
     const documentData = JSON.stringify({
         user_id: userId,
@@ -9,7 +8,7 @@ export const handleCreateDocument = async (userId: string, documentName: string,
     console.log('Document data:', documentData);
 
     try {
-        const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/create`, {
+        const response = await fetch(`http://127.0.0.1:5000/documents/create`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -41,7 +40,7 @@ export const handleCreateDocument = async (userId: string, documentName: string,
 export const getDocuments = async (userId: string) => {
     console.log(`Getting documents for user: ${userId}`);
     try {
-        const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/getall/${userId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/documents/getall/${userId}`, {
         // const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/getall/${userId}`, {
             method: 'GET',
             mode: 'cors',
@@ -81,7 +80,7 @@ export const updateDocument = async (
         // console.log('Body:', body);
     
         try {
-            const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/update`, {
+            const response = await fetch(`http://127.0.0.1:5000/documents/update`, {
                 method: 'PUT',
                 mode: 'cors',
                 headers: {
@@ -103,7 +102,7 @@ export const updateDocument = async (
 
 export const getDocument = async (userId: string, documentId: string) => {
     try {
-        const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/read/${userId}/${documentId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/documents/read/${userId}/${documentId}`, {
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -126,7 +125,7 @@ export const getDocument = async (userId: string, documentId: string) => {
 
 export const handleRemoveDocument = async (userId: string, documentId: string) => {
     try {
-        const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/delete/${userId}/${documentId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/documents/delete/${userId}/${documentId}`, {
             method: 'DELETE',
             mode: 'cors',
             headers: {
@@ -146,3 +145,43 @@ export const handleRemoveDocument = async (userId: string, documentId: string) =
         throw error;
     }
 };
+
+export const updateDocumentCategory = async (
+    userId: string,
+    documentId: string,
+    category: string
+) => {
+    const body = JSON.stringify({
+        user_id: userId,
+        document_id: documentId,
+        category: category
+    });
+
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/documents/updateCategory`, {
+            method: 'PATCH',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: body
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to update category: ${response.statusText} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log('Category updated successfully:', data);
+        return data;
+    } catch (error) {
+        console.error('Error updating category:', error);
+        throw error;
+    }
+};
+
+
+
+
+

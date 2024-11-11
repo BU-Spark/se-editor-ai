@@ -7,16 +7,20 @@ import SuggestionsContainer from './SuggestionsContainer';
 import SummaryContainer from './SummaryContainer';
 import HeadlinesContainer from './HeadlinesContainer';
 
+
 // API
 import { generateSuggestion, generateSummary, generateHeadlines } from '@/api/handle_ai';
+import CategorizationContainer from './CategorizationContainer';
+import { useAuth } from '@/context/AuthContext';
 
 interface AsideProps {
     documentContent: string;
     setDocumentContent: (content: string) => void;
+    documentId: string;
 }
 
-const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) => {
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines'>('chat');
+const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, documentId }) => {
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'categorizations'>('chat');
     const [suggestions, setSuggestions] = useState<Array<{
         header: string;
         content: string;
@@ -28,6 +32,9 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [showHeadlinesContainer, setShowHeadlinesContainer] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const { user } = useAuth();
+    const userId = user?.uid as string;
 
     // Grammar/Spell Check
     const handleGrammarCheck = async () => {
@@ -121,6 +128,14 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 >
                     Headlines
                 </button>
+                <button
+                    onClick={() => {
+                        setActiveFeature('categorizations');
+                    }}
+                    className={`px-4 py-2 ${activeFeature === 'categorizations' ? 'bg-brand-red text-white' : 'bg-white hover:bg-brand-red hover:text-white'} rounded-lg transition-colors duration-300`}
+                >
+                    Categorizations
+                </button>
             </div>
 
             {/* Loader */}
@@ -155,6 +170,16 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 {activeFeature === 'headlines' && headlines && !loading && (
                     <HeadlinesContainer headlines={headlines} onClose={() => setShowHeadlinesContainer(false)} />
                 )}
+
+                {activeFeature === 'categorizations' && (
+                    <CategorizationContainer
+                        userId={userId}  // Pass userId here
+                        documentId={documentId}  // Pass documentId here
+                        selectedCategory={selectedCategory}
+                        setSelectedCategory={setSelectedCategory}
+                    />
+                )}
+
             </div>
         </div>
     );
