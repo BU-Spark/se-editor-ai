@@ -68,13 +68,15 @@ export const updateDocument = async (
     userId: string, 
     documentId: string, 
     documentName:string,
-    new_document:string) => {
+    new_document:string,
+    category: string) => {
 
         const body = JSON.stringify({
             "user_id": userId,
             "document_name": documentName,
             "document_id": documentId,
-            "new_document": new_document
+            "new_document": new_document,
+            "category": category
         })
 
         // console.log('Body:', body);

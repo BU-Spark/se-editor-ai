@@ -17,6 +17,7 @@ def create_document():
             user_id: The user's id
             document_name: The name of the document you want to add in
             document: The content of the document
+            category: The category of the document
     """
     try:
         fireconfig = firestore_service()
@@ -29,7 +30,7 @@ def create_document():
             if(i["Title"] == data["document_name"]):
                 return handle_bad_request("Name already exists, please try again")
             
-        res = fireconfig.add_document(collection_route, dateHandler.last_modified({"Title": data["document_name"], "Content": data["document"]}))
+        res = fireconfig.add_document(collection_route, dateHandler.last_modified({"Title": data["document_name"], "Content": data["document"], "Category": data["category"]}))
 
         if not res[0]:
             return handle_server_error("Unknown error occured")
@@ -86,7 +87,7 @@ def update_document():
             if(i["Title"] == data["document_name"] and data["document_id"] != i["id"]):
                 return handle_bad_request("Name already exists, please try again")
 
-        newdoc = dateHandler.last_modified({"Title": data["document_name"], "Content": data["new_document"]})
+        newdoc = dateHandler.last_modified({"Title": data["document_name"], "Content": data["new_document"], "Category": data["category"]})
 
         res = fireconfig.update_document(collection_route, data["document_id"], newdoc)
         if not res:
@@ -136,10 +137,7 @@ def get_all_documents(userID):
 
     except Exception as e:
         return handle_server_error(e)
-    
 
-
-    
 @bp.route('/updateCategory', methods=['PATCH'])
 @cross_origin()
 def update_document_category():
@@ -180,5 +178,4 @@ def update_document_category():
 
     except Exception as e:
         return handle_server_error(str(e))
-
 
