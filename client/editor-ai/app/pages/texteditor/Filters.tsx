@@ -7,9 +7,8 @@ interface FiltersProps {
     setShowAskAI: (showAskAI: boolean) => void;
     setShowSuggestions: (showSuggestions: boolean) => void;
     onGrammarCheck: () => void;
-    onGenerateSources: () => void;
-    onCreateHeadline: () => void;
-    onAPStyleCheck: () => void;
+    onSummarize: () => void;
+    onCreateHeadlines: () => void;
 }
 
 const Filters: React.FC<FiltersProps> = ({
@@ -18,9 +17,8 @@ const Filters: React.FC<FiltersProps> = ({
     setShowAskAI,
     setShowSuggestions,
     onGrammarCheck,
-    onGenerateSources,
-    onCreateHeadline,
-    onAPStyleCheck
+    onCreateHeadlines,
+    onSummarize
 }) => {
     const [showFilters, setShowFilters] = useState(true);
 
@@ -34,13 +32,12 @@ const Filters: React.FC<FiltersProps> = ({
             {showFilters ? (
                 <div className="button-container flex flex-col items-center">
                     <OptionButton text="Grammar/Spell Check" onClick={onGrammarCheck} />
-                    <OptionButton text="Generate New Source(s)" onClick={onGenerateSources} />
-                    <OptionButton text="Create Headline" onClick={onCreateHeadline} />
-                    <OptionButton text="Summarize" onClick={onAPStyleCheck} />
+                    <OptionButton text="Summarize" onClick={onSummarize} />
+                    <OptionButton text="Create Headlines" onClick={onCreateHeadlines} />
                 </div>
             ) : (
                 <div className="flex justify-center mt-4">
-                    <button onClick={handleToggleFilters} className="button-container bg-blue-500 font-poppins custom-border border-4 px-4 py-2 bg-brand-red text-white rounded-r shadow-md">
+                    <button onClick={handleToggleFilters} className="button-container font-poppins custom-border border-4 px-4 py-2 bg-brand-red text-white rounded-r shadow-md">
                         Show Filters
                     </button>
                 </div>

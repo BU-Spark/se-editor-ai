@@ -26,6 +26,14 @@ export const generateAnswer = async (question: string, context: string): Promise
 };
 
 export const generateSuggestion = async (documentContent: string): Promise<Array<{ header: string; content: string; incorrectLine: string; correctLine: string }> | null> => {
+    if (documentContent.length < 20) {
+        return [{ 
+            header: "Not enough content", 
+            content: "No suggestions available. Write something first.", 
+            incorrectLine: "", 
+            correctLine: "" 
+        }];
+    }
     const question = 'Please provide 3-4 grammar suggestions for improving the following text. For each suggestion, include the incorrect line, the corrected line, and a brief explanation. Format your response as a JSON array, where each suggestion is an object with "header", "content", "incorrectLine", and "correctLine" properties.';
     const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nsuggestions:`;
   
@@ -58,7 +66,11 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
   }
 
   export const generateSummary = async (documentContent: string): Promise<string | null> => {
+        if (documentContent.length < 20) {
+        return "No summary available. Write something first.";
+    }
     const question = 'Please provide a concise summary of the following text. The summary should capture 6 main points and be formatted as bullet points, with each point on a new line. Do not include any leading characters like "-" or any other symbols before the bullet points.';
+
     const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nsummary:`;
 
     const res = await textGeneration({
@@ -82,7 +94,12 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
 };
 
   export const generateHeadlines = async (documentContent: string): Promise<string | null> => {
+
+    if (documentContent.length < 20) {
+        return "No headlines available. Write something first.";
+    }
     const question = 'Please generate 8 headline options for the following text. Each headline should be concise (5-10 words) and capture the main point of the article. Present each headline option on a new line.';
+
     const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nheadlines:`;
 
     const res = await textGeneration({
@@ -179,15 +196,7 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
     const generatedText = res.generated_text.trim();
     console.log('Generated recommended category:', generatedText);
 
-    // Check if the generated category is valid
-    if (validCategories.includes(generatedText)) {
-        return generatedText; // Return the valid category
-    } else {
-        // If the generated category is not valid, randomly select one from the valid categories
-        const randomIndex = Math.floor(Math.random() * validCategories.length);
-        const fallbackCategory = validCategories[randomIndex];
-        console.log(`Fallback to random category: ${fallbackCategory}`);
-        return fallbackCategory; // Return the fallback category
-    }
+    return generatedText;
+
 };
 

@@ -47,6 +47,7 @@ const SuggestionsContainer: React.FC<SuggestionsContainerProps> = ({
             </div>
         </div>
     );
+
 };
 
 export default SuggestionsContainer;

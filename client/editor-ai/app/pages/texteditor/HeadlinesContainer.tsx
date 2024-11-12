@@ -1,4 +1,5 @@
 interface HeadlinesContainerProps {
+
     headlines: string;
     onClose: () => void;
 }
@@ -20,8 +21,10 @@ const HeadlinesContainer: React.FC<HeadlinesContainerProps> = ({ headlines, onCl
                     <li key={index} className="font-newsreader mb-1">{headline}</li>
                 ))}
             </ul>
+
         </div>
     );
 };
 
 export default HeadlinesContainer;
+
