@@ -9,16 +9,15 @@ const Home: React.FC = () => {
   const { user } = useAuth();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (user == null) {
-  //     router.push("/admin"); // Redirect to login page if user is not authenticated
-  //   }
-  // }, [user, router]);
+  useEffect(() => {
+    if (user == null) {
+      router.push("/admin"); // Redirect to login page if user is not authenticated
+    }
+  }, [user, router]);
 
   return (
     <div className="homepage"> 
-      {/* {user && <HomePage />} Render HomePage only if user is signed in */}
-      <HomePage/>
+      {user && <HomePage />} {/* Render HomePage only if user is signed in */}
     </div>
   );
 };

@@ -6,7 +6,7 @@ import CreateDocumentModal from '@/components/CreateDocumentModal';
 
 interface Props {
   setDocumentName: (name: string) => void;
-  handleCreateDocument: (userId: string, documentName: string, documentContent: string) => Promise<string | null>;
+  handleCreateDocument: (userId: string, documentName: string, documentContent: string, category: string) => Promise<string | null>;
   setShowPopup: (showPopup: boolean) => void;
   documentName: string;
 }
@@ -19,11 +19,11 @@ const DocumentCreation: React.FC<Props> = ({ setDocumentName, handleCreateDocume
   };
 
   const router = useRouter();
-  const { userId } = useAuth();
-  // const userId = user?.uid as string;
+  const { user } = useAuth();
+  const userId = user?.uid as string;
 
   const handlePopupSubmit = async () => {
-    const documentId = await handleCreateDocument(userId, documentName, "");
+    const documentId = await handleCreateDocument(userId, documentName, "", "");
     console.log('DocumentId:', documentId);
     if (documentId == null) {
       setCreateDocumentFailed(true);

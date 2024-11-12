@@ -4,7 +4,7 @@ import { FormEvent } from 'react'
 import Image from 'next/image';
 import React from "react";
 import { useRouter } from 'next/navigation'
-import { signIn } from '@/lib/actions';
+import { useAuth } from '../../context/AuthContext';
 
 const LoginPage = () => {
   const [email, setEmail] = React.useState('')
@@ -13,6 +13,7 @@ const LoginPage = () => {
   const router = useRouter()
 
 
+  const { signIn } = useAuth();
 
 
   const handleForm = async (event: FormEvent) => {

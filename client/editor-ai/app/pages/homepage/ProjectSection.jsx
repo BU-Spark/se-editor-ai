@@ -4,8 +4,8 @@ import { getDocuments } from '@/api/document_functions';
 import { useAuth } from '@/context/AuthContext';
 
 const ProjectSection = ({ title, searchQuery }) => {
-  const userId = useAuth().userId;
-  // const userId = user.user.uid;
+  const user = useAuth();
+  const userId = user.user.uid;
 
   const [projects, setProjects] = useState(null);
 

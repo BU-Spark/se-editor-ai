@@ -1,4 +1,4 @@
-// File: /Users/raymond/Desktop/EditorAI/client/editor-ai/app/pages/homepage/page.tsx
+// File: /Users/raymond/Downloads/se-editor-ai-categorization-implementation/client/editor-ai/app/pages/homepage/page.tsx
 import * as entry from '../../../../../app/pages/homepage/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -1,0 +1,13 @@
+div {
+    margin: 1rem;
+  }
+  input::placeholder {
+      color:#b95454;
+  }  
+  input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid #b95454;
+    border-radius: 10px;
+  }
+    

@@ -1,0 +1,22 @@
+button {
+    height: 150px;
+    display: inline-block;
+    margin: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #801212;
+    border-radius: 4px;
+    background-color: rgb(226, 226, 226);
+    color: #000000;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  
+    /* Adjust this for spacing between the buttons */
+    margin-right: 0.5rem;
+  }
+  
+  button:hover {
+    background-color: #801212;
+    color: white;
+  }
+  
