@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 // Components
-import Filters from './Filters';
 import Chatbot from './Chatbot';
 import SuggestionsContainer from './SuggestionsContainer';
 import SummaryContainer from './SummaryContainer';

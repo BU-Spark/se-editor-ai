@@ -22,4 +22,3 @@ const HeadlinesContainer: React.FC<HeadlinesContainerProps> = ({ headlines }) =>
 };
 
 export default HeadlinesContainer;
-
