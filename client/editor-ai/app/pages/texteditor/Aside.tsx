@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 
-// Components
 import Chatbot from './Chatbot';
 import SuggestionsContainer from './SuggestionsContainer';
 import SummaryContainer from './SummaryContainer';
 import HeadlinesContainer from './HeadlinesContainer';
+import SubheadingsContainer from './SubheadingsContainer';
 
-// API
 import { generateSuggestion, generateSummary, generateHeadlines } from '@/api/handle_ai';
-
 
 interface AsideProps {
     documentContent: string;
@@ -16,34 +14,26 @@ interface AsideProps {
 }
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) => {
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines'>('chat');
-
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 
+    'subheadings'>('chat');
     const [suggestions, setSuggestions] = useState<Array<{
         header: string;
         content: string;
         incorrectLine: string;
         correctLine: string;
     }>>([]);
-    const [showSuggestionContainer, setShowSuggestionContainer] = useState(false);
-
-    const [summary, setSummary] = useState<string | null>(null);
-    const [headlines, setHeadlines] = useState<string | null>(null);
-    const [showSuggestions, setShowSuggestions] = useState(false);
-    const [showHeadlinesContainer, setShowHeadlinesContainer] = useState(false);
+    const [summary, setSummary] = useState<string | string[]>('');
+    const [headlines, setHeadlines] = useState<string | string[]>('');
     const [loading, setLoading] = useState(false);
 
-
-    // Grammar/Spell Check
     const handleGrammarCheck = async () => {
         console.log('Performing Grammar/Spell Check...');
         setLoading(true);
         const newSuggestions = await generateSuggestion(documentContent);
         setSuggestions(newSuggestions || []);
-        setShowSuggestions(true);
         setLoading(false);
     };
 
-    // Summarize functionality
     const handleSummarize = async () => {
         setLoading(true);
         const generatedSummary = await generateSummary(documentContent);
@@ -52,25 +42,20 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
         setLoading(false);
     };
 
-    // Create Headlines functionality
     const handleCreateHeadlines = async () => {
         setLoading(true);
         const generatedHeadlines = await generateHeadlines(documentContent);
         setHeadlines(generatedHeadlines);
-        setShowHeadlinesContainer(true);
         setActiveFeature('headlines');
         setLoading(false);
     };
 
     return (
         <div className="h-screen flex flex-col bg-white rounded-lg h-full p-4">
-            {/* Tab buttons */}
             <div className="flex flex-justify-between gap-1 mb-4 ">
                 <button
                     onClick={() => {
                         setActiveFeature('chat');
-                        setShowSuggestions(false);
-                        setShowHeadlinesContainer(false);
                     }}
                     className={`px-4 py-2 ${
                         activeFeature === 'chat' 
@@ -84,8 +69,6 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 <button
                     onClick={() => {
                         setActiveFeature('grammar');
-                        setShowSuggestions(false);
-                        setShowHeadlinesContainer(false);
                         handleGrammarCheck();
                     }}
                     className={`px-4 py-2 ${
@@ -128,37 +111,28 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 </button>
             </div>
 
-            {/* Loader */}
             {loading && (
                 <div className="flex justify-center items-center h-full">
                     <div className="loader"></div>
                 </div>
             )}
 
-            {/* Display of active feature */}
             <div className="flex-grow p-4 overflow-auto">
                 {activeFeature === 'chat' && !loading && (
                     <Chatbot documentContent={documentContent} />
                 )}
-
-                {/* Grammar/Spell Check Feature */}
                 {activeFeature === 'grammar' && !loading && (
                     <SuggestionsContainer
-                        setShowSuggestionContainer={() => setShowSuggestions(false)}
                         suggestions={suggestions}
                         documentContent={documentContent}
                         setDocumentContent={setDocumentContent}
                     />
                 )}
-
-                {/* Summary Feature */}
                 {activeFeature === 'summary' && summary && !loading && (
-                    <SummaryContainer summary={summary} onClose={() => setSummary(null)} />
+                    <SummaryContainer summary={summary} />
                 )}
-
-                {/* Headlines Feature */}
                 {activeFeature === 'headlines' && headlines && !loading && (
-                    <HeadlinesContainer headlines={headlines} onClose={() => setShowHeadlinesContainer(false)} />
+                    <HeadlinesContainer headlines={headlines} />
                 )}
             </div>
 

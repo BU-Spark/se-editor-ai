@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import SuggestionBox from './SuggestionBox';
 
 interface SuggestionsContainerProps {
-    setShowSuggestionContainer: (showSuggestionContainer: boolean) => void;
     documentContent: string;
     setDocumentContent: (content: string) => void;
     suggestions: Array<{
@@ -15,7 +14,6 @@ interface SuggestionsContainerProps {
 }
 
 const SuggestionsContainer: React.FC<SuggestionsContainerProps> = ({
-    setShowSuggestionContainer,
     documentContent,
     setDocumentContent,
     // refreshSuggestions, // Add this prop
