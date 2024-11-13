@@ -25,6 +25,7 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
     const [editing, setEditing] = useState(false);
     const [currentDocumentName, setCurrentDocumentName] = useState<string>('');
     const [initialDocumentName, setInitialDocumentName] = useState<string>('');
+    const [category, setCategory] = useState<string>('');
 
     useEffect(() => {
         const documentId = searchParams.get('documentid') as string;
@@ -72,12 +73,12 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
 
     const handleContentChange = async (content: string) => {
         setDocumentContent(content);
-        await updateDocument(userId, documentId, initialDocumentName, content);
+        await updateDocument(userId, documentId, initialDocumentName, content, category);
     };
 
     const submitNewTitle = () => {
         if (currentDocumentName.length > 0) {
-            updateDocument(userId, documentId, currentDocumentName, documentContent);
+            updateDocument(userId, documentId, currentDocumentName, documentContent, category);
             setEditing(false);
         }
     };
