@@ -5,7 +5,7 @@ from flask_app import create_app
 
 if __name__ == '__main__':
     app = create_app(
-        cred_route="./route/to/secrets.json",
+        cred_route="./secrets/secrets.json",
         Test=True
     )
 
@@ -13,4 +13,3 @@ if __name__ == '__main__':
         debug=False,
         threaded=True
     )
-

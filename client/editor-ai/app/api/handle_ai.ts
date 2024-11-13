@@ -156,3 +156,47 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
     return generatedText;
   };
 
+  export const generateRecommendedCategory = async (documentContent: string): Promise<string> => {
+    const validCategories = [
+        "Athletics/Sports",
+        "Business",
+        "Opinion/Columns/Editorials",
+        "Politics/City Hall/City Council",
+        "Crime and Safety",
+        "Transportation/Traffic",
+        "Real Estate/Housing",
+        "Education/Schools",
+        "Food/Dining",
+        "Weather",
+        "Local History",
+        "Activities/Events",
+        "Aimed at Student Media",
+        "Academic Programs/Departments",
+        "Student Resources/Support",
+        "Health & Wellness",
+        "Career & Professional Development",
+        "Community Engagement",
+        "Arts & Culture",
+        "Technology & Innovation"
+    ];
+
+    const question = `Based on the following document content, suggest a suitable category. You must provide a single category name. The valid categories are: ${validCategories.join(', ')}.`;
+    const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nrecommended_category:`;
+
+    const res = await textGeneration({
+        accessToken: hfToken,
+        model: modelName,
+        inputs: inputText,
+        parameters: {
+            max_new_tokens: 50, 
+            return_full_text: false,
+        },
+    });
+
+    const generatedText = res.generated_text.trim();
+    console.log('Generated recommended category:', generatedText);
+
+    return generatedText;
+
+};
+

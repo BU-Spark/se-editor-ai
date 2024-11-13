@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 type UploadButtonProps = {
-    createDocument: (userId: string, fileName: string, fileContent: string) => void;
+    createDocument: (userId: string, fileName: string, fileContent: string, category: string) => void;
     icon?: React.ReactNode;  
 };
 
@@ -26,7 +26,7 @@ const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
             console.log("User ID: ", userId);
             console.log("File Name: ", fileName);
             console.log("File Content: ", fileContent);
-            const documentId = await createDocument(userId, fileName, fileContent);
+            const documentId = await createDocument(userId, fileName, fileContent, "");
             console.log('DocumentId:', documentId);
 
             router.push(`/pages/texteditor?documentid=${documentId}`)

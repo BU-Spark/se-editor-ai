@@ -6,6 +6,7 @@ import Chatbot from './Chatbot';
 import SuggestionsContainer from './SuggestionsContainer';
 import SummaryContainer from './SummaryContainer';
 import HeadlinesContainer from './HeadlinesContainer';
+import CategorizationContainer from './CategorizationContainer';
 
 // API
 import { generateSuggestion, generateSummary, generateHeadlines } from '@/api/handle_ai';
@@ -17,7 +18,9 @@ interface AsideProps {
 }
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) => {
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines'>('chat');
+  
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'categorizations'>('chat');
+
 
     const [suggestions, setSuggestions] = useState<Array<{
         header: string;
@@ -127,6 +130,12 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 >
                     Headlines
                 </button>
+                <button
+                    onClick={() => setActiveFeature('categorizations')}
+                    className={`px-4 py-2 ${activeFeature === 'categorizations' ? 'bg-brand-red text-white' : 'bg-white hover:bg-brand-red hover:text-white'} rounded-lg transition-colors duration-300`}
+                >
+                    Categorizations
+                </button>
             </div>
 
             {/* Loader */}
@@ -160,6 +169,11 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 {/* Headlines Feature */}
                 {activeFeature === 'headlines' && headlines && !loading && (
                     <HeadlinesContainer headlines={headlines} onClose={() => setShowHeadlinesContainer(false)} />
+                )}
+
+                {/* Categorization Feature */}
+                {activeFeature === 'categorizations' && !loading && (
+                    <CategorizationContainer />
                 )}
             </div>
 
