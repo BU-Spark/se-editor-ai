@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Chatbot from './Chatbot';
 import SuggestionsContainer from './SuggestionsContainer';
@@ -28,6 +28,12 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
     const [subheadings, setSubheadings] = useState<string | string[]>('');
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        if (activeFeature === 'subheadings' && selectedText) {
+            handleCreateSubheadings();
+        }
+    }, [selectedText]);
+
     const handleGrammarCheck = async () => {
         console.log('Performing Grammar/Spell Check...');
         setLoading(true);
@@ -53,6 +59,11 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
     };
 
     const handleCreateSubheadings = async () => {
+        if (!selectedText) {
+            setSubheadings("Select some text to generate subheadings for.");
+            setLoading(false);
+            return;
+        }
         setLoading(true);
         const generatedSubheadings = await generateSubheadings(selectedText);
         setSubheadings(generatedSubheadings);
@@ -122,9 +133,8 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                 <button
                     onClick={() => {
                         setActiveFeature('subheadings');
-                        if (!subheadings) {
-                            handleCreateSubheadings();
-                        }
+                        setSubheadings('');
+                        handleCreateSubheadings();
                     }}
                     className={`px-4 py-2 ${
                         activeFeature === 'subheadings' 

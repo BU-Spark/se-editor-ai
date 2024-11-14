@@ -27,6 +27,7 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
     const [currentDocumentName, setCurrentDocumentName] = useState<string>('');
     const [initialDocumentName, setInitialDocumentName] = useState<string>('');
     const quillRef = useRef<any>(null);
+    const [isEditorFocused, setIsEditorFocused] = useState(false);
 
     useEffect(() => {
         const documentId = searchParams.get('documentid') as string;
@@ -96,6 +97,16 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
         }
     };
 
+    const handleFocus = () => {
+        setIsEditorFocused(true);
+        console.log('Editor focused');
+    };
+
+    const handleBlur = () => {
+        setIsEditorFocused(false);
+        console.log('Editor lost focus');
+    };
+
     return (
     <div className="flex flex-col h-full overflow-hidden ">
         {/* Title and Toolbar section */}
@@ -124,8 +135,10 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
                 value={documentContent}
                 placeholder="Write your content..."
                 onChange={handleContentChange}
-                onSelectionChange={handleSelection}
+                onChangeSelection={handleSelection}
                 style={{ height: '90%', maxHeight: 'calc(100vh - 10rem)',border: 'none', boxShadow: 'none', outline: 'none' }}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
             />
         </div>
     </div>
