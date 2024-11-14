@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Chatbot from './Chatbot';
 import SuggestionsContainer from './SuggestionsContainer';
@@ -6,14 +6,15 @@ import SummaryContainer from './SummaryContainer';
 import HeadlinesContainer from './HeadlinesContainer';
 import SubheadingsContainer from './SubheadingsContainer';
 
-import { generateSuggestion, generateSummary, generateHeadlines } from '@/api/handle_ai';
+import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings } from '@/api/handle_ai';
 
 interface AsideProps {
     documentContent: string;
     setDocumentContent: (content: string) => void;
+    selectedText: string;
 }
 
-const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) => {
+const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, selectedText }) => {
     const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 
     'subheadings'>('chat');
     const [suggestions, setSuggestions] = useState<Array<{
@@ -24,7 +25,14 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
     }>>([]);
     const [summary, setSummary] = useState<string | string[]>('');
     const [headlines, setHeadlines] = useState<string | string[]>('');
+    const [subheadings, setSubheadings] = useState<string | string[]>('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (activeFeature === 'subheadings' && selectedText) {
+            handleCreateSubheadings();
+        }
+    }, [selectedText]);
 
     const handleGrammarCheck = async () => {
         console.log('Performing Grammar/Spell Check...');
@@ -47,6 +55,19 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
         const generatedHeadlines = await generateHeadlines(documentContent);
         setHeadlines(generatedHeadlines);
         setActiveFeature('headlines');
+        setLoading(false);
+    };
+
+    const handleCreateSubheadings = async () => {
+        if (!selectedText) {
+            setSubheadings("Select some text to generate subheadings for.");
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
+        const generatedSubheadings = await generateSubheadings(selectedText);
+        setSubheadings(generatedSubheadings);
+        setActiveFeature('subheadings');
         setLoading(false);
     };
 
@@ -109,6 +130,20 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 >
                     Headlines
                 </button>
+                <button
+                    onClick={() => {
+                        setActiveFeature('subheadings');
+                        setSubheadings('');
+                        handleCreateSubheadings();
+                    }}
+                    className={`px-4 py-2 ${
+                        activeFeature === 'subheadings' 
+                            ? 'bg-brand-red text-white' 
+                            : 'bg-white hover:bg-brand-red hover:text-white'
+                    } rounded-lg transition-colors duration-300`}
+                >
+                    Subheadings
+                </button>
             </div>
 
             {loading && (
@@ -133,6 +168,9 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 )}
                 {activeFeature === 'headlines' && headlines && !loading && (
                     <HeadlinesContainer headlines={headlines} />
+                )}
+                {activeFeature === 'subheadings' && subheadings && !loading && (
+                    <SubheadingsContainer subheadings={subheadings} />
                 )}
             </div>
 
