@@ -89,6 +89,7 @@ const CategorizationContainer: React.FC = () => {
             try {
                 await updateDocumentCategory(userId, documentId, localSelectedCategory);
                 setHasChanges(false);
+                setInitialDocumentCategory(localSelectedCategory);
                 console.log(`Category saved as ${localSelectedCategory} for document ${documentId}`);
             } catch (error) {
                 console.error('Error saving category:', error);
@@ -141,22 +142,20 @@ const CategorizationContainer: React.FC = () => {
                                     {recommendedCategory} (Recommended)
                                 </button>
                             )}
-                            {categories
-                                .filter(category => category !== recommendedCategory)
-                                .map((category, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => {
-                                            handleCategoryClick(category);
-                                            setIsDropdownOpen(false);
-                                        }}
-                                        className={`w-full px-4 py-2 text-left hover:bg-gray-50 text-brand-red ${
-                                            localSelectedCategory === category ? 'bg-gray-50' : ''
-                                        }`}
-                                    >
-                                        {category}
-                                    </button>
-                                ))}
+                            {categories.map((category, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => {
+                                        handleCategoryClick(category);
+                                        setIsDropdownOpen(false);
+                                    }}
+                                    className={`w-full px-4 py-2 text-left hover:bg-gray-50 text-brand-red ${
+                                        localSelectedCategory === category ? 'bg-gray-50' : ''
+                                    }`}
+                                >
+                                    {category}
+                                </button>
+                            ))}
                         </div>
                     )}
                 </div>

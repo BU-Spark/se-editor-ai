@@ -17,7 +17,7 @@ interface AsideProps {
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, selectedText }) => {
 
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorizations'>('chat');
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorization'>('chat');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const [suggestions, setSuggestions] = useState<Array<{
@@ -141,12 +141,12 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                         </button>
                         <button
                             onClick={() => {
-                                setActiveFeature('categorizations');
+                                setActiveFeature('categorization');
                                 setIsDropdownOpen(false);
                             }}
                             className="w-full px-4 py-2 text-left hover:bg-gray-50"
                         >
-                            Categorizations
+                            Categorization
                         </button>
                     </div>
                 )}
@@ -178,7 +178,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                 {activeFeature === 'subheadings' && subheadings && !loading && (
                     <SubheadingsContainer subheadings={subheadings} />
                 )}
-                {activeFeature === 'categorizations' && !loading && (
+                {activeFeature === 'categorization' && !loading && (
                     <CategorizationContainer />
                 )}
             </div>
