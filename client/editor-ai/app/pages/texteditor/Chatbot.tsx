@@ -53,9 +53,9 @@ const Chatbot = ({setShowAskAI,documentContent}:ChatbotProps) => {
   };
 
   return (
-    <div className="h-[calc(100vh-15rem)]  flex flex-col bg-white rounded-xl p-4">
-      <div className="flex flex-row justify-between">
-                <h2 className="font-newsreader text-2xl mb-2">Ask EditorAI</h2>
+    <div className="h-[calc(100vh-15rem)]  flex flex-col bg-white rounded-xl">
+      <div className="flex flex-row justify-between mb-6">
+                <h2 className="text-2xl">Ask EditorAI</h2>
             </div>
       {messages.length > 10 && <button onClick={handleResetConversation}> Reset</button>}
       
@@ -64,19 +64,23 @@ const Chatbot = ({setShowAskAI,documentContent}:ChatbotProps) => {
         {messages.map((message) => (
           message.author === 'editorai' 
           ? (
-            <div key={message.id} className="p-2 bg-brand-red rounded-xl shadow text-white poppins-thin">
-              {message.text}
+            <div key={message.id} className="flex justify-start">
+              <div className="p-2 bg-brand-tan rounded-xl shadow text-brand-red max-w-[80%]">
+                {message.text}
+              </div>
             </div>
           ) : (
-            <div key={message.id} className="p-2 bg-brand-tan text-brand-red rounded-xl shadow poppins-thin">
-              {message.text}
+            <div key={message.id} className="flex justify-end">
+              <div className="p-2 bg-brand-red text-white rounded-xl shadow max-w-[80%]">
+                {message.text}
+              </div>
             </div>
           )
         ))}
       </div>
   
       {/* Input field fixed to the bottom */}
-      <div className="sticky bottom-0 flex border-brand-red border-2 rounded-xl items-center shadow-md poppins-thin bg-white">
+      <div className="sticky bottom-0 flex border-brand-red border-2 rounded-xl items-center shadow-md bg-white">
         <input
           type="text"
           placeholder="Type your message..."

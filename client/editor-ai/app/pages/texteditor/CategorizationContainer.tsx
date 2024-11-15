@@ -37,6 +37,8 @@ const CategorizationContainer: React.FC = () => {
     const [recommendedCategory, setRecommendedCategory] = useState<string | null>(null);
     const [documentContent, setDocumentContent] = useState<string>('');
     const [isRecommendationLoading, setIsRecommendationLoading] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [initialDocumentCategory, setInitialDocumentCategory] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchCurrentCategory = async () => {
@@ -45,6 +47,7 @@ const CategorizationContainer: React.FC = () => {
                     const document = await getDocument(userId, documentId);
                     if (document?.message?.Category) {
                         setLocalSelectedCategory(document.message.Category);
+                        setInitialDocumentCategory(document.message.Category);
                     }
                     const content = document?.message?.Content || '';
                     setDocumentContent(content);
@@ -78,7 +81,7 @@ const CategorizationContainer: React.FC = () => {
 
     const handleCategoryClick = (category: string) => {
         setLocalSelectedCategory(category);
-        setHasChanges(category !== localSelectedCategory);
+        setHasChanges(category !== initialDocumentCategory);
     };
 
     const handleSaveCategory = async () => {
@@ -94,33 +97,80 @@ const CategorizationContainer: React.FC = () => {
     };
 
     return (
-        <div className="p-4 overflow-y-auto">
-            <div className="flex justify-between items-center mb-2">
-                <h2 className="font-newsreader text-2xl">Select a Category</h2>
-                {hasChanges && (
+        <div className="bg-white rounded-lg">
+            <div>
+                <div className="mb-4">
+                    <h2 className="text-2xl">Select a Category</h2>
+                </div>
+                <div className="text-base mb-2">
+                    {initialDocumentCategory ? (
+                        `Current Category: ${initialDocumentCategory}`
+                    ) : (
+                        `Recommended Category: ${isRecommendationLoading ? 'Loading...' : recommendedCategory || 'None'}`
+                    )}
+                </div>
+
+                <div className="relative mb-2">
                     <button
-                        onClick={handleSaveCategory}
-                        className="px-4 py-2 bg-brand-red text-white rounded-lg transition-colors hover"
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="w-full px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 flex justify-between items-center text-brand-red"
                     >
-                        Save
+                        <span>
+                            {initialDocumentCategory ? 
+                                (localSelectedCategory === initialDocumentCategory ? 'Change category' : localSelectedCategory)
+                                : (localSelectedCategory || 'Select a category')
+                            }
+                        </span>
+                        <svg className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                     </button>
-                )}
-            </div>
-            <div className="font-newsreader text-xl mb-2 italic">
-                Recommended Category: {isRecommendationLoading ? 'Loading...' : recommendedCategory || 'None'}
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-                {categories.map((category, index) => (
-                    <div
-                        key={index}
-                        onClick={() => handleCategoryClick(category)}
-                        className={`flex flex-col cursor-pointer p-2 rounded-lg transition-colors font-newsreader ${
-                            localSelectedCategory === category ? 'bg-brand-red text-white' : 'bg-white text-black'
-                        }`}
-                    >
-                        {category}
+
+                    {isDropdownOpen && (
+                        <div className="absolute w-full mt-1 bg-white border rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                            {!initialDocumentCategory && recommendedCategory && (
+                                <button
+                                    onClick={() => {
+                                        handleCategoryClick(recommendedCategory);
+                                        setIsDropdownOpen(false);
+                                    }}
+                                    className={`w-full px-4 py-2 text-left hover:bg-gray-50 text-brand-red font-semibold border-b ${
+                                        localSelectedCategory === recommendedCategory ? 'bg-gray-50' : ''
+                                    }`}
+                                >
+                                    {recommendedCategory} (Recommended)
+                                </button>
+                            )}
+                            {categories
+                                .filter(category => category !== recommendedCategory)
+                                .map((category, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => {
+                                            handleCategoryClick(category);
+                                            setIsDropdownOpen(false);
+                                        }}
+                                        className={`w-full px-4 py-2 text-left hover:bg-gray-50 text-brand-red ${
+                                            localSelectedCategory === category ? 'bg-gray-50' : ''
+                                        }`}
+                                    >
+                                        {category}
+                                    </button>
+                                ))}
+                        </div>
+                    )}
+                </div>
+
+                {hasChanges && localSelectedCategory !== initialDocumentCategory && (
+                    <div className="flex justify-end">
+                        <button
+                            onClick={handleSaveCategory}
+                            className="px-4 py-2 bg-brand-red text-white rounded-lg transition-colors hover"
+                        >
+                            Save
+                        </button>
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );
