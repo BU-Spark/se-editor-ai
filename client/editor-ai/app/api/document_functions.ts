@@ -1,4 +1,4 @@
-export const handleCreateDocument = async (userId: string, documentName: string, documentContent: string, category: string) => {
+export const handleCreateDocument = async (userId: string, documentName: string, documentContent: string, category: string = '') => {
     const documentData = JSON.stringify({
         user_id: userId,
         document_name: documentName,

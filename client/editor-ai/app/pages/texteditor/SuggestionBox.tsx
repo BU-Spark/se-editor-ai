@@ -30,7 +30,7 @@ const SuggestionBox: React.FC<SuggestionBoxProps> = ({
   const [isVisible, setIsVisible] = useState(true); // Add this state variable
 
   const handleClick = () => {
-    setIsClicked(true);
+    setIsClicked(prev => !prev);
   };
 
   const handleApplyClick = () => {
@@ -62,7 +62,7 @@ const SuggestionBox: React.FC<SuggestionBoxProps> = ({
   return (
     <div>
       {!showSaveContainer && (
-        <div onClick={() => setIsClicked(true)} className="button-container bg-brand-red rounded-lg p-2 m-2 flex-col">
+        <div onClick={handleClick} className="button-container bg-brand-red rounded-lg p-2 m-2 flex-col">
           <div className="flex flex-col">
             <div className="flex flex-row justify-between">
               <h2 className="font-newsreader text-xl text-white underline">{header}</h2>

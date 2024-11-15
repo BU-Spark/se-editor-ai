@@ -95,7 +95,17 @@ const CategorizationContainer: React.FC = () => {
 
     return (
         <div className="p-4 overflow-y-auto">
-            <h2 className="font-newsreader text-2xl mb-2">Select a Category</h2>
+            <div className="flex justify-between items-center mb-2">
+                <h2 className="font-newsreader text-2xl">Select a Category</h2>
+                {hasChanges && (
+                    <button
+                        onClick={handleSaveCategory}
+                        className="px-4 py-2 bg-brand-red text-white rounded-lg transition-colors hover"
+                    >
+                        Save
+                    </button>
+                )}
+            </div>
             <div className="font-newsreader text-xl mb-2 italic">
                 Recommended Category: {isRecommendationLoading ? 'Loading...' : recommendedCategory || 'None'}
             </div>
@@ -112,14 +122,6 @@ const CategorizationContainer: React.FC = () => {
                     </div>
                 ))}
             </div>
-            {hasChanges && (
-                <button
-                    onClick={handleSaveCategory}
-                    className="mt-4 px-4 py-2 bg-brand-red text-white rounded-lg transition-colors hover"
-                >
-                    Save New Category
-                </button>
-            )}
         </div>
     );
 };
