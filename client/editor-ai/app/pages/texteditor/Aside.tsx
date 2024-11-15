@@ -11,13 +11,16 @@ import CategorizationContainer from './CategorizationContainer';
 // API
 import { generateSuggestion, generateSummary, generateHeadlines } from '@/api/handle_ai';
 
+
 interface AsideProps {
     documentContent: string;
     setDocumentContent: (content: string) => void;
 }
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) => {
+
     const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'categorizations'>('chat');
+
 
     const [suggestions, setSuggestions] = useState<Array<{
         header: string;
@@ -32,6 +35,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [showHeadlinesContainer, setShowHeadlinesContainer] = useState(false);
     const [loading, setLoading] = useState(false);
+
 
     // Grammar/Spell Check
     const handleGrammarCheck = async () => {
