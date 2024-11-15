@@ -8,7 +8,7 @@ import CategorizationContainer from './CategorizationContainer';
 import SubheadingsContainer from './SubheadingsContainer';
 
 // API
-import { generateSuggestion, generateSummary, generateHeadlines } from '@/api/handle_ai';
+import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings } from '@/api/handle_ai';
 
 
 interface AsideProps {
@@ -17,9 +17,9 @@ interface AsideProps {
     selectedText: string;
 }
 
-const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) => {
+const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, selectedText }) => {
 
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'categorizations'>('chat');
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorizations'>('chat');
 
 
     const [suggestions, setSuggestions] = useState<Array<{
@@ -179,6 +179,10 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent }) =>
                 )}
                 {activeFeature === 'headlines' && headlines && !loading && (
                     <HeadlinesContainer headlines={headlines} onClose={() => setShowHeadlinesContainer(false)} />
+                )}
+
+                {activeFeature === 'subheadings' && subheadings && !loading && (
+                    <SubheadingsContainer subheadings={subheadings} />
                 )}
 
                 {/* Categorization Feature */}
