@@ -1,9 +1,9 @@
-
-export const handleCreateDocument = async (userId: string, documentName: string, documentContent: string) => {
+export const handleCreateDocument = async (userId: string, documentName: string, documentContent: string, category: string = '') => {
     const documentData = JSON.stringify({
         user_id: userId,
         document_name: documentName,
         document: documentContent,
+        category: category,
     });
 
     console.log('Document data:', documentData);
@@ -68,38 +68,40 @@ export const getDocuments = async (userId: string) => {
 export const updateDocument = async (
     userId: string, 
     documentId: string, 
-    documentName:string,
-    new_document:string) => {
-
-        const body = JSON.stringify({
-            "user_id": userId,
-            "document_name": documentName,
-            "document_id": documentId,
-            "new_document": new_document
-        })
+    documentName: string,
+    new_document: string,
+    category: string
+) => {
+    const body = JSON.stringify({
+        user_id: userId,
+        document_name: documentName,
+        document_id: documentId,
+        new_document: new_document,
+        category: category
+    });
 
         // console.log('Body:', body);
     
-        try {
-            const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/update`, {
-                method: 'PUT',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: body
-            });
+    try {
+        const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/update`, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: body
+        });
 
-            console.log('Response:', response);
-            const data = await response.json();
-            console.log(data)
+        console.log('Response:', response);
+        const data = await response.json();
+        console.log(data)
     
     
-        } catch (error) {
-            console.error('Error getting documents:', error);
-            throw error;
-        }
-    };
+    } catch (error) {
+        console.error('Error getting documents:', error);
+        throw error;
+    }
+};
 
 export const getDocument = async (userId: string, documentId: string) => {
     try {
@@ -146,3 +148,43 @@ export const handleRemoveDocument = async (userId: string, documentId: string) =
         throw error;
     }
 };
+
+export const updateDocumentCategory = async (
+    userId: string,
+    documentId: string,
+    category: string
+) => {
+    const body = JSON.stringify({
+        user_id: userId,
+        document_id: documentId,
+        category: category
+    });
+
+    try {
+        const response = await fetch(`https://se-editor-ai-production.up.railway.app/documents/updateCategory`, {
+            method: 'PATCH',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: body
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to update category: ${response.statusText} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log('Category updated successfully:', data);
+        return data;
+    } catch (error) {
+        console.error('Error updating category:', error);
+        throw error;
+    }
+};
+
+
+
+
+

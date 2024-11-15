@@ -4,9 +4,12 @@ import Chatbot from './Chatbot';
 import SuggestionsContainer from './SuggestionsContainer';
 import SummaryContainer from './SummaryContainer';
 import HeadlinesContainer from './HeadlinesContainer';
+import CategorizationContainer from './CategorizationContainer';
 import SubheadingsContainer from './SubheadingsContainer';
 
+// API
 import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings } from '@/api/handle_ai';
+
 
 interface AsideProps {
     documentContent: string;
@@ -15,8 +18,10 @@ interface AsideProps {
 }
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, selectedText }) => {
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 
-    'subheadings'>('chat');
+
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorizations'>('chat');
+
+
     const [suggestions, setSuggestions] = useState<Array<{
         header: string;
         content: string;
@@ -144,6 +149,12 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                 >
                     Subheadings
                 </button>
+                <button
+                    onClick={() => setActiveFeature('categorizations')}
+                    className={`px-4 py-2 ${activeFeature === 'categorizations' ? 'bg-brand-red text-white' : 'bg-white hover:bg-brand-red hover:text-white'} rounded-lg transition-colors duration-300`}
+                >
+                    Categorizations
+                </button>
             </div>
 
             {loading && (
@@ -152,7 +163,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                 </div>
             )}
 
-            <div className="flex-grow p-4 overflow-auto">
+            <div className="flex-grow p-4 overflow-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
                 {activeFeature === 'chat' && !loading && (
                     <Chatbot documentContent={documentContent} />
                 )}
@@ -167,10 +178,16 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                     <SummaryContainer summary={summary} />
                 )}
                 {activeFeature === 'headlines' && headlines && !loading && (
-                    <HeadlinesContainer headlines={headlines} />
+                    <HeadlinesContainer headlines={headlines} onClose={() => setShowHeadlinesContainer(false)} />
                 )}
+
                 {activeFeature === 'subheadings' && subheadings && !loading && (
                     <SubheadingsContainer subheadings={subheadings} />
+                )}
+
+                {/* Categorization Feature */}
+                {activeFeature === 'categorizations' && !loading && (
+                    <CategorizationContainer />
                 )}
             </div>
 

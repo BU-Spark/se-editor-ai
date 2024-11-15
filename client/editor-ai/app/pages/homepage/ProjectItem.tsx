@@ -11,7 +11,8 @@ export interface ProjectItemProps {
   title: string;
   lastModified: string;
   documentId: string; 
-  documentContent:string
+  documentContent: string;
+  onRemove: (documentId: string) => void;
 }
 
 /**
@@ -23,7 +24,8 @@ const ProjectItem = ({
   title,
   lastModified,
   documentId,
-  documentContent
+  documentContent,
+  onRemove
 }: ProjectItemProps) => {
   const [deleted, setDeleted] = useState<boolean>(false);
   const router = useRouter();
@@ -60,6 +62,7 @@ const ProjectItem = ({
     console.log(`Removing project: ${title}`);
     setDeleted(true);
     await handleRemoveDocument(userId, documentId); // Pass documentId instead of key
+    onRemove(documentId);
   };
 
   return (

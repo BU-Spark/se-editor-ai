@@ -22,8 +22,8 @@ import AskAIBot from '@/components/CreateDocumentModal';
     
     return (
       <div className="w-full bg-brand-tan" style={{ backgroundColor: '#F5F0EF', width: '100%',  height: '100%', margin:'0rem'}}>
-          <TextEditor /> {/* change this line once the projects page is set up */}
-        </div>
+        <TextEditor /> {/* change this line once the projects page is set up */}
+      </div>
     );
   };
   

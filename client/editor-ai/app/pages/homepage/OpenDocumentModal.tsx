@@ -24,15 +24,8 @@ const OpenDocumentModal: React.FC<OpenDocumentModalProps> = ({
     return (
         <>
             {showOpenConfirmation && (
-                 
-                <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-                    <div className="relative bg-white p-8 rounded-lg shadow-lg "
-            style={{ width: '602px',
-            height: '360px',
-            borderRadius: '21px',
-            backgroundColor: 'rgba(245, 240, 239, 0.95)',  // Semi-transparent background
-            zIndex: 100
-            }} >
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50" style={{ zIndex: 1000 }}>
+                    <div className="relative bg-white p-8 rounded-lg shadow-lg" style={{ width: '602px', height: '360px', borderRadius: '21px', backgroundColor: 'rgba(245, 240, 239, 0.95)' }}>
                         <button
                             className="absolute top-2 right-2 text-xl py-2 px-2 font-bold text-black"
                             onClick={handleClose}
