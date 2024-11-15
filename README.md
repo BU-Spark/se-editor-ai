@@ -129,7 +129,6 @@ se-editor-ai/
 ---
 
 ## Known Bugs and Issues
-- **Home Page:** Incorrect ``ProjectSection`` behavior, such as highlighting the wrong document when selecting a project. UI elements may overlap in certain cases.
 - **Text Editor Page:** Page reload redirect users to the login page even if logged in. Document content does not save after applying suggestions if the user does not interact with the text editor afterward.
 - **AI Features:** Certain features behave inconsistently. This is most likely an issue with the prompting or response format.
 - **Promote Page:** There is an issue preventing the deployment of promotions from the promote page. Running ``npm run build`` will display the page without errors, but not during deployment.
@@ -138,8 +137,9 @@ se-editor-ai/
 
 ## Future Work
 - **Fix Existing Known Bugs and Issues**
+- **Improve AI Features:** Implement functionality to refresh AI-generated suggestions, headlines, etc. to receive new and different outputs.
 - **Migrate AI and API functionalities:** Move AI functionalities and related API calls to the backend for security and performance.
-- **Migrate Authentication:** Move Firebase authentication to the backend for security and performance.
+- **Migrate Authentication:** Move Firebase authentication to the backend for security and performance. 
 - **Improve UI:** Redesign interactions for a smoother user experience.
 - **Google Authentication:** Add Google login for easier user sign-in.
 
