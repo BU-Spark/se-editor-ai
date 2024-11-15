@@ -163,7 +163,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                 </div>
             )}
 
-            <div className="flex-grow p-4 overflow-auto">
+            <div className="flex-grow p-4 overflow-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
                 {activeFeature === 'chat' && !loading && (
                     <Chatbot documentContent={documentContent} />
                 )}
