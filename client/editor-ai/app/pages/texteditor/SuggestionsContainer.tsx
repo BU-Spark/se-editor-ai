@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import SuggestionBox from './SuggestionBox';
 
 interface SuggestionsContainerProps {
-    setShowSuggestionContainer: (showSuggestionContainer: boolean) => void;
     documentContent: string;
     setDocumentContent: (content: string) => void;
     suggestions: Array<{
@@ -15,7 +14,6 @@ interface SuggestionsContainerProps {
 }
 
 const SuggestionsContainer: React.FC<SuggestionsContainerProps> = ({
-    setShowSuggestionContainer,
     documentContent,
     setDocumentContent,
     // refreshSuggestions, // Add this prop
@@ -27,8 +25,12 @@ const SuggestionsContainer: React.FC<SuggestionsContainerProps> = ({
                 <h1 className="font-newsreader text-2xl">Suggestions</h1>
             </div>
             <div>
-                {suggestions.length > 0 ? (
-                    suggestions.map((suggestion, index) => (
+                {suggestions.map((suggestion, index) => (
+                    suggestion.header === "Not enough content" ? (
+                        <div key={index} className="mt-4">
+                            <p className="mt-2">{suggestion.content}</p>
+                        </div>
+                    ) : (
                         <SuggestionBox
                             key={index}
                             documentContent={documentContent}
@@ -38,12 +40,8 @@ const SuggestionsContainer: React.FC<SuggestionsContainerProps> = ({
                             incorrectLine={suggestion.incorrectLine}
                             correctLine={suggestion.correctLine}
                         />
-                    ))
-                ) : (
-                    <div>
-                        <h1 className='font-newsreader'>No suggestions available</h1>
-                    </div>
-                )}
+                    )
+                ))}
             </div>
         </div>
     );

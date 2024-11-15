@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import 'quill/dist/quill.snow.css';
 import { useAuth } from '@/context/AuthContext';
@@ -11,6 +11,7 @@ interface DocumentEditorProps {
     setDocumentContent: (content: string) => void;
     documentId: string;
     setDocumentId: (documentId: string) => void;
+    onTextSelect?: (selectedText: string) => void;
 }
 
 const ReactQuillNoSSR = dynamic(
@@ -18,7 +19,7 @@ const ReactQuillNoSSR = dynamic(
     { ssr: false }
 );
 
-const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDocumentId }: DocumentEditorProps) => {
+const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDocumentId, onTextSelect }: DocumentEditorProps) => {
     const { user } = useAuth();
     const userId = user?.uid as string;
     const searchParams = useSearchParams();
@@ -26,6 +27,9 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
     const [currentDocumentName, setCurrentDocumentName] = useState<string>('');
     const [initialDocumentName, setInitialDocumentName] = useState<string>('');
     const [category, setCategory] = useState<string>('');
+    const quillRef = useRef<any>(null);
+    const [isEditorFocused, setIsEditorFocused] = useState(false);
+
 
     useEffect(() => {
         const documentId = searchParams.get('documentid') as string;
@@ -83,6 +87,28 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
         }
     };
 
+    const handleSelection = (range: any, source: string, editor: any) => {
+        if (range && range.length > 0) {
+            const selectedText = editor.getText(range.index, range.length).trim();
+            console.log('Selected text:', selectedText);
+            if (onTextSelect) {
+                onTextSelect(selectedText);
+            }
+        } else if (onTextSelect) {
+            onTextSelect('');
+        }
+    };
+
+    const handleFocus = () => {
+        setIsEditorFocused(true);
+        console.log('Editor focused');
+    };
+
+    const handleBlur = () => {
+        setIsEditorFocused(false);
+        console.log('Editor lost focus');
+    };
+
     return (
     <div className="flex flex-col h-full overflow-hidden ">
         {/* Title and Toolbar section */}
@@ -105,12 +131,16 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
 
         <div className="flex-grow p-4 overflow-hidden">
             <ReactQuillNoSSR
+                ref={quillRef}
                 modules={modules}
                 formats={formats}
                 value={documentContent}
                 placeholder="Write your content..."
                 onChange={handleContentChange}
+                onChangeSelection={handleSelection}
                 style={{ height: '90%', maxHeight: 'calc(100vh - 10rem)',border: 'none', boxShadow: 'none', outline: 'none' }}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
             />
         </div>
     </div>

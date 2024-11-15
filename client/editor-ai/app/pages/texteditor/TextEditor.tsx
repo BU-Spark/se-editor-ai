@@ -11,7 +11,7 @@ const TextEditor = () => {
     const [editorWidth, setEditorWidth] = useState(50);
     const [documentContent, setDocumentContent] = useState('');
     const [documentId, setDocumentId] = useState<string | null>(null);
-
+    const [selectedText, setSelectedText] = useState('');
     return (
         <div className="flex h-screen overflow-hidden">
             {/* Text Editor Section */}
@@ -33,6 +33,7 @@ const TextEditor = () => {
                         setDocumentContent={setDocumentContent} 
                         documentId={documentId}
                         setDocumentId={setDocumentId}
+                        onTextSelect={setSelectedText}
                     />
                 </div>
             </div>
@@ -42,7 +43,7 @@ const TextEditor = () => {
 
             {/* Aside Section */}
             <div id="asidesection" className="flex flex-col bg-gray-100 border-l border-gray-200 h-full overflow-hidden" style={{ width: `${100 - editorWidth}%` }}>
-                <Aside documentContent={documentContent} setDocumentContent={setDocumentContent} />
+                <Aside documentContent={documentContent} setDocumentContent={setDocumentContent} selectedText={selectedText} />
             </div>
         </div>
     );
