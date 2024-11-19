@@ -62,15 +62,13 @@ const SuggestionBox: React.FC<SuggestionBoxProps> = ({
   return (
     <div>
       {!showSaveContainer && (
-        <div onClick={handleClick} className="button-container bg-brand-red rounded-lg p-2 m-2 flex-col">
-          <div className="flex flex-col">
-            <div className="flex flex-row justify-between">
-              <h2 className="font-newsreader text-xl text-white underline">{header}</h2>
-            </div>
-          </div>
+        <div onClick={handleClick} className="button-container bg-brand-red rounded-lg m-2 flex flex-col">
+          {/* <div className="flex flex-col "> */}
+              <h2 className="font-newsreader text-xl text-white underline cursor-pointer p-2">{header}</h2>
+          {/* </div> */}
 
           {isClicked && (
-            <div className="suggestion-actions">
+            <div className="suggestion-actions p-2">
               <p className="font-newsreader flex-1 text-white">{content}</p>
               <br />
               <p className="font-newsreader flex-1 text-white">Incorrect line: &quot;{incorrectLine}&quot;</p>
