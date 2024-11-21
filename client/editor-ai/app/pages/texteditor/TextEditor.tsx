@@ -15,7 +15,7 @@ const TextEditor = () => {
     return (
         <div className="flex h-screen overflow-hidden">
             {/* Text Editor Section */}
-            <div id="editorsection" className="bg-white flex flex-col h-[calc(100vh-8rem)]" style={{ width: `${editorWidth}%` }}>
+            <div id="editorsection" className="bg-white flex flex-col h-[calc(100vh-6rem)]" style={{ width: `${editorWidth}%` }}>
                 {/* Document Editor */}
                 <div className="flex-grow overflow-auto"> 
                     <DocumentEditor 
