@@ -8,7 +8,7 @@ import CategorizationContainer from './CategorizationContainer';
 import SubheadingsContainer from './SubheadingsContainer';
 
 // API
-import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings } from '@/api/handle_ai';
+import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings, generateApStyleChecking } from '@/api/handle_ai';
 
 
 interface AsideProps {
@@ -19,7 +19,7 @@ interface AsideProps {
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, selectedText }) => {
 
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorizations'>('chat');
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorizations' | 'AP_style'>('chat');
 
 
     const [suggestions, setSuggestions] = useState<Array<{
@@ -32,7 +32,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
     const [headlines, setHeadlines] = useState<string | string[]>('');
     const [subheadings, setSubheadings] = useState<string | string[]>('');
     const [loading, setLoading] = useState(false);
-
+    const [apStyleContent, setapStyleContent] = useState<string | string[]>('');
     useEffect(() => {
         if (activeFeature === 'subheadings' && selectedText) {
             handleCreateSubheadings();
@@ -75,7 +75,12 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
         setActiveFeature('subheadings');
         setLoading(false);
     };
-
+    const handleAPStyleChecking = async () => {
+        setLoading(true);
+        const generatedAPStyleContent = await generateApStyleChecking(documentContent);
+        setapStyleContent(generatedAPStyleContent);
+        setLoading(false);
+    };
     return (
         <div className="h-screen flex flex-col bg-white rounded-lg h-full p-4">
             <div className="flex flex-justify-between gap-1 mb-4 ">
@@ -90,7 +95,6 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                     } rounded-lg transition-colors duration-300`}
                 >
                     Chat
-
                 </button>
                 <button
                     onClick={() => {
@@ -119,6 +123,19 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                     } rounded-lg transition-colors duration-300`}
                 >
                     Summary
+                </button>
+                <button
+                    onClick={() => {
+                        setActiveFeature('AP_style');    
+                        handleAPStyleChecking();
+                    }}
+                    className={`px-4 py-2 ${
+                        activeFeature === 'AP_style' 
+                            ? 'bg-brand-red text-white' 
+                            : 'bg-white hover:bg-brand-red hover:text-white'
+                    } rounded-lg transition-colors duration-300`}
+                >
+                    AP Style
                 </button>
                 <button
                     onClick={() => {
@@ -174,6 +191,9 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                         setDocumentContent={setDocumentContent}
                     />
                 )}
+                {activeFeature === 'AP_style' && apStyleContent && !loading && (
+                    <div>{apStyleContent}</div>
+                )}
                 {activeFeature === 'summary' && summary && !loading && (
                     <SummaryContainer summary={summary} />
                 )}
@@ -190,7 +210,6 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                     <CategorizationContainer />
                 )}
             </div>
-
         </div>
     );
 };

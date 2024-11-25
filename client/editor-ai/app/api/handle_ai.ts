@@ -248,4 +248,19 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
     }
 };
 
-
+export const generateApStyleChecking = async (documentContent: string): Promise<string> => {
+  const question = "Correct the following document content to align with AP style, return the corrected content only";
+  const inputText = `${question}. Document content: ${documentContent}`;
+  const res = await textGeneration({
+    accessToken: hfToken,
+    model: modelName,
+    inputs: inputText,
+    parameters: {
+      max_new_tokens: 50,
+      return_full_text: false,
+    }
+  });
+  const generatedText = res.generated_text.trim();
+  // console.log("AP Style: ", generatedText);
+  return generatedText;
+};

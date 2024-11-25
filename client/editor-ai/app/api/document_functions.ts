@@ -1,5 +1,5 @@
-const BASE_URL = 'https://se-editor-ai-production.up.railway.app';
-//const BASE_URL = 'http://127.0.0.1:5000';
+// const BASE_URL = 'https://se-editor-ai-production.up.railway.app';
+const BASE_URL = 'http://127.0.0.1:5000';
 
 export const handleCreateDocument = async (userId: string, documentName: string, documentContent: string, category: string = '') => {
     const documentData = JSON.stringify({
