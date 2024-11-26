@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={poppins.className}>
         <AuthProvider>\
           <Header />
-           <div style={{ paddingTop: '90px' }}> 
+           <div style={{ paddingTop: '80px' }}> 
            {children}
           </div>
         </AuthProvider>      

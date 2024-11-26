@@ -36,7 +36,7 @@ const HomePage = () => {
 
 
   return (
-    <div>
+    <div className="h-screen overflow-y-auto">
       {/* welcome message */}
       <div className="mt-8 px-16">
         <h1 className="text-3xl text-brand-red">

@@ -13,9 +13,9 @@ const TextEditor = () => {
     const [documentId, setDocumentId] = useState<string | ''>('');
     const [selectedText, setSelectedText] = useState('');
     return (
-        <div className="flex h-screen overflow-hidden">
+        <div className="bg-white flex h-screen overflow-hidden">
             {/* Text Editor Section */}
-            <div id="editorsection" className="bg-white flex flex-col h-[calc(100vh-6rem)]" style={{ width: `${editorWidth}%` }}>
+            <div id="editorsection" className="bg-white flex flex-col h-[calc(100vh-5.4rem)]" style={{ width: `${editorWidth}%` }}>
                 {/* Document Editor */}
                 <div className="flex-grow overflow-auto"> 
                     <DocumentEditor 
@@ -32,7 +32,7 @@ const TextEditor = () => {
             <ResizableSlider editorWidth={editorWidth} setEditorWidth={setEditorWidth} />
 
             {/* Aside Section */}
-            <div id="asidesection" className="flex flex-col bg-gray-100 border-l border-gray-200 h-full overflow-hidden" style={{ width: `${100 - editorWidth}%` }}>
+            <div id="asidesection" className="flex flex-col h-full overflow-hidden" style={{ width: `${100 - editorWidth}%` }}>
                 <Aside documentContent={documentContent} setDocumentContent={setDocumentContent} selectedText={selectedText} />
             </div>
         </div>

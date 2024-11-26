@@ -75,7 +75,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
     };
 
     return (
-        <div className="h-screen flex flex-col bg-white rounded-lg h-full p-2">
+        <div className="h-screen flex flex-col bg-white h-full p-3">
             <div className="relative mb-4">
                 <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
