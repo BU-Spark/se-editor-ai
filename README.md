@@ -137,11 +137,12 @@ se-editor-ai/
 
 ## Future Work
 - **Fix Existing Known Bugs and Issues**
+- **Promote Page:** Finish promote page user functionality, such as social media integration.
 - **Improve AI Features:** Implement functionality to refresh AI-generated suggestions, headlines, etc. to receive new and different outputs.
 - **Migrate AI and API functionalities:** Move AI functionalities and related API calls to the backend for security and performance.
 - **Migrate Authentication:** Move Firebase authentication to the backend for security and performance. 
-- **Improve UI:** Redesign interactions for a smoother user experience.
 - **Google Authentication:** Add Google login for easier user sign-in.
+- **Update UI Styling:** Refresh login page, promote page, and profile page styling.
 
 ---
 

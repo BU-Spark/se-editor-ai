@@ -60,7 +60,7 @@ const readContents = (file: File): Promise<string> => {
             />
             <button 
                 onClick={handleClick} 
-                className= "font-poppins h-48 w-36 inline-block m-4 px-4 py-2 border-4 custom-border-color rounded bg-brand-tan text-black cursor-pointer text-base transition-colors duration-300 ease-in-out mr-2 hover:bg-red-800 hover:text-white flex flex-col items-center justify-center"
+                className= "shadow-md font-poppins h-48 w-36 inline-block m-4 px-4 py-2 border-2 custom-border-color rounded bg-brand-tan text-black cursor-pointer text-base transition-colors duration-300 ease-in-out mr-2 hover:bg-red-800 hover:text-white flex flex-col items-center justify-center"
                 style={{}}>
                 {icon && <img src="/upload.svg" className="icon-class mb-8" alt="icon" style={{ width: '26px', height: '26px' }} />}
                 Upload Document

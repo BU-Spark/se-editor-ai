@@ -18,7 +18,7 @@ const ActionButton = ({ onClick, icon}: ActionButtonProps) => {
 
 
 
-  const buttonClasses = "shadow-md font-poppins h-48 w-36 inline-block m-4 px-4 py-2 border-4 custom-border-color rounded bg-brand-tan text-black cursor-pointer text-base transition-colors duration-300 ease-in-out mr-2 hover:bg-red-800 hover:text-white flex flex-col items-center justify-center";
+  const buttonClasses = "shadow-md font-poppins h-48 w-36 inline-block m-4 px-4 py-2 border-2 custom-border-color rounded bg-brand-tan text-black cursor-pointer text-base transition-colors duration-300 ease-in-out mr-2 hover:bg-red-800 hover:text-white flex flex-col items-center justify-center";
 
   return (
     <div>

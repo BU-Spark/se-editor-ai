@@ -4,16 +4,16 @@ interface SummaryContainerProps {
 
 const SummaryContainer: React.FC<SummaryContainerProps> = ({ summary }) => {
     return (
-        <div className="bg-white rounded-lg p-4 mb-4">
-            <div className="flex flex-row justify-between">
-                <h2 className="font-newsreader text-2xl mb-2">Summary</h2>
+        <div className="bg-white rounded-lg mb-4">
+            <div className="flex flex-row justify-between mb-1">
+                <h2 className="text-2xl mb-2">Summary</h2>
             </div>
             {typeof summary === "string" ? (
                 <p className="mt-2">{summary}</p>
             ) : (
-                <ul className="list-disc pl-5 mb-4"> 
+                <ul className="list-disc pl-5 mb-4">
                     {(summary as string[]).map((point, index) => (
-                        <li key={index} className="font-newsreader mb-1">{point}</li> 
+                        <li key={index} className="mb-1">{point}</li>
                     ))}
                 </ul>
             )}

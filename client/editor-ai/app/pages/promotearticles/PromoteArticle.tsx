@@ -43,11 +43,26 @@ const PromoteArticle = () => {
             <h1 className="text-3xl text-center m-5 mb-2 font-newsreader">Promote your Project: {documentTitle}</h1>
             <div className="flex items-center justify-start mb-5">
             <Link href="./homepage" legacyBehavior> 
-                        <a className="text-main-color font-bold font-newsreader flex items-center">
-                        <img src="/back.svg" alt="logo" width={25} height={25} style={{ marginRight: '10px' , marginTop: '15px', marginBottom:'0px'}}/>
-                        <span className="mt-5 text-2xl font-poppins"> Back </span> </a>
-                    </Link>
-                    </div>
+                <a className="text-brand-red font-bold flex items-center mr-2">
+                    <svg 
+                        width="20" 
+                        height="20" 
+                        viewBox="0 0 24 24" 
+                        className="mr-2"
+                    >
+                        <path 
+                            d="M15 18L9 12L15 6" 
+                            stroke="currentColor" 
+                            strokeWidth="2" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round"
+                            fill="none"
+                        />
+                    </svg>
+                    <span className="text-2xl font-poppins">Back</span>
+                </a>
+            </Link>
+            </div>
 
             {/* layout 2 */}
             {isClient && (<div className=" flex flex-row justify-between items-start gap-5">

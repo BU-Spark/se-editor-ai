@@ -20,9 +20,9 @@ const SuggestionsContainer: React.FC<SuggestionsContainerProps> = ({
     suggestions
 }) => {
     return (
-        <div className="bg-white rounded-lg p-4 mb-4">
-            <div className="flex flex-row justify-between">
-                <h1 className="font-newsreader text-2xl">Suggestions</h1>
+        <div className="bg-white rounded-lg mb-4">
+            <div className="flex flex-row justify-between mb-5">
+                <h1 className="text-2xl">Suggestions</h1>
             </div>
             <div>
                 {suggestions.map((suggestion, index) => (

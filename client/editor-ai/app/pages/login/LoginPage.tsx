@@ -35,9 +35,12 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center flex-col">
-      <div className="bg-brand-tan p-8 rounded-lg shadow-md flex flex-col items-center" style={{ width: '532px', 
-       height: '640px',borderRadius: '9px 0px 0px 0px'}}>
+    <div className="pt-20 flex justify-center w-full">
+      <div className="bg-brand-tan p-8 rounded-lg shadow-md flex flex-col items-center" style={{ 
+        width: '532px', 
+        height: '640px',
+        borderRadius: '9px 0px 0px 0px'
+      }}>
         <div className="flex justify-center w-full">
         <Image src="/editorai.svg" alt="Logo" width={90} height={90} />
         </div>
@@ -113,11 +116,10 @@ const LoginPage = () => {
         <h1  className="text-center mt-4 normal-font" style={{fontFamily:'poppins', fontWeight: 'light'}}>
          Dont have an account? 
          </h1>
-         <a href="/pages/signup" className="text-main-color bold-weight underline" style={{fontWeight: 'bold'}}>Sign up</a>
+         <a href="/pages/signup" className="text-main-color bold-weight underline" style={{fontWeight: 'bold'}}>Sign Up</a>
       </div>
     </div>
   );
 };
 
 export default LoginPage;
-

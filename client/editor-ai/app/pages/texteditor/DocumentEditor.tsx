@@ -5,7 +5,8 @@ import 'quill/dist/quill.snow.css';
 import { useAuth } from '@/context/AuthContext';
 import { updateDocument, getDocument } from '@/api/document_functions';
 import { useRouter, useSearchParams } from 'next/navigation';
-
+import Link from 'next/link';
+import { DeltaStatic, Sources } from 'quill'; //
 interface DocumentEditorProps {
     documentContent: string;
     setDocumentContent: (content: string) => void;
@@ -23,13 +24,12 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
     const { user } = useAuth();
     const userId = user?.uid as string;
     const searchParams = useSearchParams();
-    const [editing, setEditing] = useState(false);
     const [currentDocumentName, setCurrentDocumentName] = useState<string>('');
     const [initialDocumentName, setInitialDocumentName] = useState<string>('');
     const [category, setCategory] = useState<string>('');
     const quillRef = useRef<any>(null);
     const [isEditorFocused, setIsEditorFocused] = useState(false);
-
+    const saveTimeoutRef = useRef<NodeJS.Timeout>();
 
     useEffect(() => {
         const documentId = searchParams.get('documentid') as string;
@@ -48,8 +48,29 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newTitle = e.target.value;
         setCurrentDocumentName(newTitle);
-        setEditing(initialDocumentName.trim() !== newTitle.trim());
+        
+        // Clear any existing timeout
+        if (saveTimeoutRef.current) {
+            clearTimeout(saveTimeoutRef.current);
+        }
+
+        // Set a new timeout to save after 1 second of no typing
+        saveTimeoutRef.current = setTimeout(() => {
+            if (newTitle.length > 0 && newTitle.trim() !== initialDocumentName.trim()) {
+                updateDocument(userId, documentId, newTitle, documentContent, category);
+                setInitialDocumentName(newTitle); // Update the initial title after saving
+            }
+        }, 1000);
     };
+
+    // Cleanup timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (saveTimeoutRef.current) {
+                clearTimeout(saveTimeoutRef.current);
+            }
+        };
+    }, []);
 
     const modules = {
         toolbar: [
@@ -76,10 +97,12 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
     ];
 
     const handleContentChange = async (content: string) => {
+        console.log(content) //
         setDocumentContent(content);
         await updateDocument(userId, documentId, initialDocumentName, content, category);
     };
 
+    
     const submitNewTitle = () => {
         if (currentDocumentName.length > 0) {
             updateDocument(userId, documentId, currentDocumentName, documentContent, category);
@@ -110,43 +133,60 @@ const DocumentEditor = ({ documentContent, setDocumentContent, documentId, setDo
     };
 
     return (
-    <div className="flex flex-col h-full overflow-hidden ">
-        {/* Title and Toolbar section */}
-        <div className="sticky top-0 z-10 bg-white p-4 flex justify-between items-center ">
-            <input
-                className="text-2xl font-bold bg-transparent"
-                placeholder={initialDocumentName}
-                value={currentDocumentName}
-                onChange={handleTitleChange}
-            />
-            {editing && (
-                <button
-                    className="bg-brand-red text-white font-bold py-2 px-4 rounded"
-                    onClick={submitNewTitle}
-                >
-                    Save New Title
-                </button>
-            )}
+        <div className="flex flex-col h-full overflow-hidden">
+            <div className="sticky top-0 z-10 bg-white pl-4 pt-4">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                        <Link href="./homepage" legacyBehavior>
+                            <a className="text-brand-red font-bold flex items-center mr-2">
+                                <svg 
+                                    width="20" 
+                                    height="20" 
+                                    viewBox="0 0 24 24" 
+                                    className="mr-2"
+                                >
+                                    <path 
+                                        d="M15 18L9 12L15 6" 
+                                        stroke="currentColor" 
+                                        strokeWidth="2" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round"
+                                        fill="none"
+                                    />
+                                </svg>
+                            </a>
+                        </Link>
+                        <input
+                            className="text-2xl"
+                            placeholder={initialDocumentName}
+                            value={currentDocumentName}
+                            onChange={handleTitleChange}
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="flex-grow px-0 pb-0 pt-4 overflow-hidden [&_.ql-container.ql-snow]:border-0 [&_.ql-toolbar.ql-snow]:border-x-0 [&_.ql-toolbar.ql-snow]:border-t">
+                <ReactQuillNoSSR
+                    ref={quillRef}
+                    modules={modules}
+                    formats={formats}
+                    value={documentContent}
+                    placeholder="Write your content..."
+                    onChange={handleContentChange}
+                    onChangeSelection={handleSelection}
+                    style={{ 
+                        height: '95%', 
+                        maxHeight: 'calc(100vh - 8rem)',
+                        border: 'none', 
+                        boxShadow: 'none', 
+                        outline: 'none'
+                    }}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                />
+            </div>
         </div>
-
-        <div className="flex-grow p-4 overflow-hidden">
-            <ReactQuillNoSSR
-                ref={quillRef}
-                modules={modules}
-                formats={formats}
-                value={documentContent}
-                placeholder="Write your content..."
-                onChange={handleContentChange}
-                onChangeSelection={handleSelection}
-                style={{ height: '90%', maxHeight: 'calc(100vh - 10rem)',border: 'none', boxShadow: 'none', outline: 'none' }}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-            />
-        </div>
-    </div>
-);
-
-
+    );
 };
 
 export default DocumentEditor;
