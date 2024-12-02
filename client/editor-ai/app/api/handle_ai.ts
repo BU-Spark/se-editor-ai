@@ -249,3 +249,19 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
 };
 
 
+export const generateApStyleChecking = async (documentContent: string): Promise<string> => {
+  const question =
+  "Correct the following document content to align with AP style. Remove all HTML tags and any text within angle brackets (<> or </>), and return only the corrected plain text content. No prefixes or additional indicators should be included.";
+  const inputText = `${question}. Document content: ${documentContent}`;
+  const res = await textGeneration({
+    accessToken: hfToken,
+    model: modelName,
+    inputs: inputText,
+    parameters: {
+      max_new_tokens: documentContent.length,
+      return_full_text: false,
+    },
+  });
+  const generatedText = res.generated_text.trim();
+  return generatedText;
+};
