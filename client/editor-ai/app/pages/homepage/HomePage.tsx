@@ -36,13 +36,19 @@ const HomePage = () => {
 
 
   return (
-    <div>
+    <div className="h-screen overflow-y-auto">
+      {/* welcome message */}
+      <div className="mt-8 px-16">
+        <h1 className="text-3xl text-brand-red">
+          Welcome, {user?.displayName || 'User'}
+        </h1>
+      </div>
       {/* search bar */}
       <div className="mt-5 px-10">
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
       </div>
       {/* buttons */}
-      <div className="flex mb-5 gap-10 px-11" style={{fontFamily:'Poppins'}}>
+      <div className="flex mb-5 gap-2 px-11 -mt-2" style={{fontFamily:'Poppins'}}>
         <ActionButton onClick={() => setShowPopup(true)} icon="/+.svg"/>
         <UploadButton createDocument={handleCreateDocument} icon="/upload.svg"/>
         {/*<PromoteButton onClick={handlePromoteArticleModal} icon="/promote.svg"/>*/}
@@ -51,7 +57,7 @@ const HomePage = () => {
       {/* document modal */}
       { <DocumentModal open={open} onClose={()=> setOpen(false)}> 
           <div className="flex flex-col gap-4" > 
-          <h1 className="text-4xl font-newsreader mb-6">What would you like help with?</h1>
+          <h1 className="text-4xl mb-6">What would you like help with?</h1>
         <hr className="border-t-solid border-1 border-grey" /> 
         <div className="flex flex-row justify-center"> 
           <button 
@@ -67,7 +73,7 @@ const HomePage = () => {
             onClick={() => setOpen(false)}
           > 
       
-            Promote an article 
+            Promote an article
 
           </button>
         </div>
@@ -75,15 +81,15 @@ const HomePage = () => {
       </DocumentModal> }
 
       {/* document creation popup */}
-      <div className='p-8'>
-      {showPopup && <DocumentCreation documentName={documentName} setDocumentName={setDocumentName} handleCreateDocument={handleCreateDocument} setShowPopup={setShowPopup} />}
+      <div className='px-8'>
+        {showPopup && <DocumentCreation documentName={documentName} setDocumentName={setDocumentName} handleCreateDocument={handleCreateDocument} setShowPopup={setShowPopup} />}
       </div>
       <div className="px-6">
-      <Divider />
+        <Divider />
       </div>
 
       {/* project section */}
-      <div className='p-4 mr-40 font-newsreader'>
+      <div className='px-12 mt-10 font-poppins'>
       <ProjectSection title={"Projects"} searchQuery={searchQuery} />
       </div>
     </div>

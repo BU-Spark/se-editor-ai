@@ -68,7 +68,7 @@ const ProjectItem = ({
   return (
     <>
       {!deleted && (
-        <div className="w-64 bg-white rounded-lg shadow-md p-4 relative">
+        <div className="w-64 bg-white rounded-lg p-4 relative border-2 border-gray-200 hover:border-brand-red hover:shadow-lg transition-all duration-200">
 
           <ProjectItemDisplay
             title={title}

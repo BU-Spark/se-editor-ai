@@ -62,41 +62,44 @@ const SuggestionBox: React.FC<SuggestionBoxProps> = ({
   return (
     <div>
       {!showSaveContainer && (
-        <div onClick={handleClick} className="button-container bg-brand-red rounded-lg p-2 m-2 flex-col">
+        <div onClick={handleClick} className="button-container bg-brand-tan rounded-lg p-2 m-2 flex-col">
           <div className="flex flex-col">
             <div className="flex flex-row justify-between">
-              <h2 className="font-newsreader text-xl text-white underline">{header}</h2>
+              <h2 className="text-xl text-brand-red">{header}</h2>
             </div>
           </div>
 
           {isClicked && (
-            <div className="suggestion-actions">
-              <p className="font-newsreader flex-1 text-white">{content}</p>
-              <br />
-              <p className="font-newsreader flex-1 text-white">Incorrect line: &quot;{incorrectLine}&quot;</p>
-              <br />
-              <p className="font-newsreader flex-1 text-white">Suggested edit: &quot;{correctLine}&quot;</p>
-              <button
-                onClick={handleApplyClick}
-                className="action-button text-sm font-poppins text-brand-red rounded-md w-24 h-8 bg-white shadow-md m-2"
-              >
-                Apply
-              </button>
-              <button
-                className="close-button font-poppins text-sm text-brand-red rounded-md w-24 h-8 bg-white shadow-md m-2"
-                onClick={handleClose}
-              >
-                Ignore
-              </button>
-              <div className="flex justify-center w-full">
-              <button
-                onClick={handleShowAskAI}
-                className="action-button font-poppins text-brand-red rounded-md w-52 h-14 bg-white shadow-md"
-              >
-                Ask AI
-              </button>
+            <>
+              <hr className="border-t border-brand-red my-2" />
+              <div className="suggestion-actions">
+                <p className="flex-1 text-brand-red">{content}</p>
+                <br />
+                <p className="flex-1 text-brand-red">Incorrect line: &quot;{incorrectLine}&quot;</p>
+                <br />
+                <p className="flex-1 text-brand-red">Suggested edit: &quot;{correctLine}&quot;</p>
+                <button
+                  onClick={handleApplyClick}
+                  className="action-button text-sm text-white rounded-md w-24 h-8 bg-brand-red shadow-md m-1 mt-4"
+                >
+                  Apply
+                </button>
+                <button
+                  className="close-button text-sm text-white rounded-md w-24 h-8 bg-brand-red shadow-md m-1 mt-4"
+                  onClick={handleClose}
+                >
+                  Ignore
+                </button>
+                {/* <div className="flex justify-center w-full">
+                <button
+                  onClick={handleShowAskAI}
+                  className="action-button text-white rounded-md w-52 h-14 bg-brand-red shadow-md"
+                >
+                  Ask AI
+                </button>
+                </div> */}
               </div>
-            </div>
+            </>
           )}
         </div>
       )}

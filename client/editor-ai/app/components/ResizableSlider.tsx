@@ -18,7 +18,7 @@ const ResizableSlider: React.FC<ResizableSliderProps> = ({ editorWidth, setEdito
         const container = sliderRef.current?.parentElement;
         if (!container) return;
         const newWidth = (e.clientX / container.offsetWidth) * 100;
-        setEditorWidth(Math.max(20, Math.min(76, newWidth))); // Change the maximum width % it can take, as we add more features (buttons)
+        setEditorWidth(Math.max(50, Math.min(75, newWidth)));
     }, [setEditorWidth]);
 
     const handleMouseUp = useCallback(() => {

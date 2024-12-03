@@ -7,9 +7,7 @@ import HeadlinesContainer from './HeadlinesContainer';
 import CategorizationContainer from './CategorizationContainer';
 import SubheadingsContainer from './SubheadingsContainer';
 
-// API
 import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings } from '@/api/handle_ai';
-
 
 interface AsideProps {
     documentContent: string;
@@ -19,8 +17,8 @@ interface AsideProps {
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, selectedText }) => {
 
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorizations'>('chat');
-
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorization'>('chat');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const [suggestions, setSuggestions] = useState<Array<{
         header: string;
@@ -77,84 +75,81 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
     };
 
     return (
-        <div className="h-screen flex flex-col bg-white rounded-lg h-full p-4">
-            <div className="flex flex-justify-between gap-1 mb-4 ">
+        <div className="h-screen flex flex-col bg-white h-full p-3">
+            <div className="relative mb-4">
                 <button
-                    onClick={() => {
-                        setActiveFeature('chat');
-                    }}
-                    className={`px-4 py-2 ${
-                        activeFeature === 'chat' 
-                            ? 'bg-brand-red text-white' 
-                            : 'bg-white hover:bg-brand-red hover:text-white'
-                    } rounded-lg transition-colors duration-300`}
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-full px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 flex justify-between items-center"
                 >
-                    Chat
+                    <span>{activeFeature.charAt(0).toUpperCase() + activeFeature.slice(1)}</span>
+                    <svg className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
 
-                </button>
-                <button
-                    onClick={() => {
-                        setActiveFeature('grammar');
-                        handleGrammarCheck();
-                    }}
-                    className={`px-4 py-2 ${
-                        activeFeature === 'grammar' 
-                            ? 'bg-brand-red text-white' 
-                            : 'bg-white hover:bg-brand-red hover:text-white'
-                    } rounded-lg transition-colors duration-300`}
-                >
-                    Grammar
-                </button>
-                <button
-                    onClick={() => {
-                        setActiveFeature('summary');
-                        if (!summary) {
-                            handleSummarize();
-                        }
-                    }}
-                    className={`px-4 py-2 ${
-                        activeFeature === 'summary' 
-                            ? 'bg-brand-red text-white' 
-                            : 'bg-white hover:bg-brand-red hover:text-white'
-                    } rounded-lg transition-colors duration-300`}
-                >
-                    Summary
-                </button>
-                <button
-                    onClick={() => {
-                        setActiveFeature('headlines');
-                        if (!headlines) {
-                            handleCreateHeadlines();
-                        }
-                    }}
-                    className={`px-4 py-2 ${
-                        activeFeature === 'headlines' 
-                            ? 'bg-brand-red text-white' 
-                            : 'bg-white hover:bg-brand-red hover:text-white'
-                    } rounded-lg transition-colors duration-300`}
-                >
-                    Headlines
-                </button>
-                <button
-                    onClick={() => {
-                        setActiveFeature('subheadings');
-                        setSubheadings('');
-                        handleCreateSubheadings();
-                    }}
-                    className={`px-4 py-2 ${
-                        activeFeature === 'subheadings' 
-                            ? 'bg-brand-red text-white' 
-                            : 'bg-white hover:bg-brand-red hover:text-white'
-                    } rounded-lg transition-colors duration-300`}
-                >
-                    Subheadings
-                </button>
-                <button
-                    onClick={() => setActiveFeature('categorizations')}
-                    className={`px-4 py-2 ${activeFeature === 'categorizations' ? 'bg-brand-red text-white' : 'bg-white hover:bg-brand-red hover:text-white'} rounded-lg transition-colors duration-300`}
-                >
-                    Categorizations
-                </button>
+                {isDropdownOpen && (
+                    <div className="absolute w-full mt-1 bg-white border rounded-lg shadow-lg z-10">
+                        <button
+                            onClick={() => {
+                                setActiveFeature('chat');
+                                setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                            Chat
+                        </button>
+                        <button
+                            onClick={() => {
+                                setActiveFeature('grammar');
+                                handleGrammarCheck();
+                                setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                            Grammar
+                        </button>
+                        <button
+                            onClick={() => {
+                                setActiveFeature('summary');
+                                if (!summary) handleSummarize();
+                                setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                            Summary
+                        </button>
+                        <button
+                            onClick={() => {
+                                setActiveFeature('headlines');
+                                if (!headlines) handleCreateHeadlines();
+                                setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                            Headlines
+                        </button>
+                        <button
+                            onClick={() => {
+                                setActiveFeature('subheadings');
+                                setSubheadings('');
+                                handleCreateSubheadings();
+                                setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                            Subheadings
+                        </button>
+                        <button
+                            onClick={() => {
+                                setActiveFeature('categorization');
+                                setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                            Categorization
+                        </button>
+                    </div>
+                )}
             </div>
 
             {loading && (
@@ -163,7 +158,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                 </div>
             )}
 
-            <div className="flex-grow p-4 overflow-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+            <div className="flex-grow p-2 overflow-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
                 {activeFeature === 'chat' && !loading && (
                     <Chatbot documentContent={documentContent} />
                 )}
@@ -178,15 +173,12 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                     <SummaryContainer summary={summary} />
                 )}
                 {activeFeature === 'headlines' && headlines && !loading && (
-                    <HeadlinesContainer headlines={headlines} onClose={() => setShowHeadlinesContainer(false)} />
+                    <HeadlinesContainer headlines={headlines} />
                 )}
-
                 {activeFeature === 'subheadings' && subheadings && !loading && (
                     <SubheadingsContainer subheadings={subheadings} />
                 )}
-
-                {/* Categorization Feature */}
-                {activeFeature === 'categorizations' && !loading && (
+                {activeFeature === 'categorization' && !loading && (
                     <CategorizationContainer />
                 )}
             </div>

@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import { Poppins } from 'next/font/google'
 
 const config: Config = {
   content: [
@@ -11,7 +10,6 @@ const config: Config = {
     extend: {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
-        newsreader: ['Newsreader', 'sans-serif']
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
