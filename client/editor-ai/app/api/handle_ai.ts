@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { textGeneration, HfInference } from '@huggingface/inference';
 
 const hfToken = process.env.NEXT_PUBLIC_HF_ACCESS_TOKEN;
@@ -234,7 +233,6 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
     });
 
     const generatedText = res.generated_text.trim();
-    console.log('Generated recommended category:', generatedText);
 
     // Check if the generated category is valid
     if (validCategories.includes(generatedText)) {
@@ -248,4 +246,27 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
     }
 };
 
-
+export const generateImageSuggestions = async (documentContent: string): Promise<string | string[]> => {
+  if (documentContent.length < 20) {
+    return "No image suggestions available. Write something first.";
+  }
+  const question = 'Generate exactly three (keywords or phrases) representing tangible objects, actions, people, settings, or scenes that could realistically be photographed. Avoid abstract concepts and focus on visuals that would appear in a stock photo library. Present each suggestion on a new line.';
+  const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nkeywords:`;
+  const res = await textGeneration({
+    accessToken: hfToken,
+    model: modelName,
+    inputs: inputText,
+    parameters: {
+      max_new_tokens: 100,
+      return_full_text: false,
+      temperature: 0.7
+    },
+  });
+  const generatedText = res.generated_text;
+  const keywords = generatedText
+    .split('\n')
+    .slice(1)
+    .map(line => line.trim().replace(/^\d+\.\s*/, ''))
+    .filter(Boolean);
+  return keywords;
+};

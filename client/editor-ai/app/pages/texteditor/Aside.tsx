@@ -6,8 +6,10 @@ import SummaryContainer from './SummaryContainer';
 import HeadlinesContainer from './HeadlinesContainer';
 import CategorizationContainer from './CategorizationContainer';
 import SubheadingsContainer from './SubheadingsContainer';
+import ImageSuggestionsContainer from './ImageSuggestionsContainer';
 
-import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings } from '@/api/handle_ai';
+import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings, generateImageSuggestions } from '@/api/handle_ai';
+import { fetchImagesForKeywords } from '@/api/api_functions';
 
 interface AsideProps {
     documentContent: string;
@@ -17,7 +19,7 @@ interface AsideProps {
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, selectedText }) => {
 
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorization'>('chat');
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorization' | 'image Suggestions'>('chat');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const [suggestions, setSuggestions] = useState<Array<{
@@ -29,6 +31,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
     const [summary, setSummary] = useState<string | string[]>('');
     const [headlines, setHeadlines] = useState<string | string[]>('');
     const [subheadings, setSubheadings] = useState<string | string[]>('');
+    const [imageSuggestions, setImageSuggestions] = useState<string | Array<{url: string; source: string}>>('');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -71,6 +74,19 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
         const generatedSubheadings = await generateSubheadings(selectedText);
         setSubheadings(generatedSubheadings);
         setActiveFeature('subheadings');
+        setLoading(false);
+    };
+
+    const handleCreateImageSuggestions = async () => {
+        setLoading(true);
+        const keywords = await generateImageSuggestions(documentContent);
+        if (typeof keywords === 'string') {
+            setImageSuggestions(keywords);
+        } else {
+            const images = await fetchImagesForKeywords(keywords);
+            setImageSuggestions(images);
+        }
+        setActiveFeature('image Suggestions');
         setLoading(false);
     };
 
@@ -148,6 +164,16 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                         >
                             Categorization
                         </button>
+                        <button
+                            onClick={() => {
+                                setActiveFeature('image Suggestions');
+                                if (!imageSuggestions) handleCreateImageSuggestions();
+                                setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                            Image Suggestions
+                        </button>
                     </div>
                 )}
             </div>
@@ -180,6 +206,9 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                 )}
                 {activeFeature === 'categorization' && !loading && (
                     <CategorizationContainer />
+                )}
+                {activeFeature === 'image Suggestions' && imageSuggestions && !loading && (
+                    <ImageSuggestionsContainer imageSuggestions={imageSuggestions} />
                 )}
             </div>
 
