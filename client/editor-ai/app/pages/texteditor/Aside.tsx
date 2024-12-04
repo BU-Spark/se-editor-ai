@@ -7,7 +7,7 @@ import HeadlinesContainer from './HeadlinesContainer';
 import CategorizationContainer from './CategorizationContainer';
 import SubheadingsContainer from './SubheadingsContainer';
 
-import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings } from '@/api/handle_ai';
+import { generateSuggestion, generateSummary, generateHeadlines, generateSubheadings, generateAPSuggestions } from '@/api/handle_ai';
 
 interface AsideProps {
     documentContent: string;
@@ -17,7 +17,7 @@ interface AsideProps {
 
 const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, selectedText }) => {
 
-    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorization'>('chat');
+    const [activeFeature, setActiveFeature] = useState<'chat' | 'grammar' | 'summary' | 'headlines' | 'subheadings' | 'categorization' | 'apsuggestions'>('chat');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const [suggestions, setSuggestions] = useState<Array<{
@@ -74,6 +74,27 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
         setLoading(false);
     };
 
+    const handleAPSuggestions = async () => {
+        console.log('Performing AP Style Suggestions...');
+        setLoading(true);
+        const newSuggestions = await generateAPSuggestions(documentContent);
+        setSuggestions(newSuggestions || []);
+        setActiveFeature('apsuggestions');
+        setLoading(false);
+    };
+
+    const featureDisplayNames: { [key: string]: string } = {
+        chat: 'Chat',
+        grammar: 'Grammar',
+        summary: 'Summary',
+        headlines: 'Headlines',
+        subheadings: 'Subheadings',
+        categorization: 'Categorization',
+        apsuggestions: 'AP Suggestions',
+    };
+    
+    
+
     return (
         <div className="h-screen flex flex-col bg-white h-full p-3">
             <div className="relative mb-4">
@@ -81,7 +102,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="w-full px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 flex justify-between items-center"
                 >
-                    <span>{activeFeature.charAt(0).toUpperCase() + activeFeature.slice(1)}</span>
+                    <span>{featureDisplayNames[activeFeature]}</span>
                     <svg className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
@@ -106,7 +127,7 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                             }}
                             className="w-full px-4 py-2 text-left hover:bg-gray-50"
                         >
-                            Grammar
+                            Grammar Suggestions
                         </button>
                         <button
                             onClick={() => {
@@ -148,6 +169,16 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                         >
                             Categorization
                         </button>
+                        <button
+                            onClick={() => {
+                                setActiveFeature('apsuggestions');
+                                handleAPSuggestions();
+                                setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                            AP Stylebook Suggestions
+                        </button>
                     </div>
                 )}
             </div>
@@ -180,6 +211,13 @@ const Aside: React.FC<AsideProps> = ({ documentContent, setDocumentContent, sele
                 )}
                 {activeFeature === 'categorization' && !loading && (
                     <CategorizationContainer />
+                )}
+                {activeFeature === 'apsuggestions' && !loading && (
+                    <SuggestionsContainer
+                        suggestions={suggestions}
+                        documentContent={documentContent}
+                        setDocumentContent={setDocumentContent}
+                    />
                 )}
             </div>
 

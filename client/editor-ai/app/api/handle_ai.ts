@@ -68,7 +68,7 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
     if (documentContent.length < 20) {
         return "No summary available. Write something first.";
     }
-    const question = 'Extract 5 key points from this text. Each point should be a direct and concise sentence. Present each point on a new line.';
+    const question = 'Extract 5 key points from this text. Each point should strictly be only one direct and concise sentence. Present each point on a new line.';
     const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nsummary:`;
 
     const res = await textGeneration({
@@ -248,4 +248,43 @@ export const generateSuggestion = async (documentContent: string): Promise<Array
     }
 };
 
+export const generateAPSuggestions = async (documentContent: string): Promise<Array<{ header: string; content: string; incorrectLine: string; correctLine: string }> | null> => {
+  if (documentContent.length < 20) {
+      return [{ 
+          header: "Not enough content", 
+          content: "No AP Style suggestions available. Write something first.", 
+          incorrectLine: "", 
+          correctLine: "" 
+      }];
+  }
+  const question = 'Please provide 3-4 AP Style suggestions for improving the following text. For each suggestion, include the incorrect line, the corrected line, and a brief explanation. Format your response as a JSON array, where each suggestion is an object with "header", "content", "incorrectLine", and "correctLine" properties.';
+  const inputText = `context: ${context} question: ${question}\ndocument: ${documentContent}\nAPStyleSuggestions:`;
+
+  const res = await textGeneration({
+      accessToken: hfToken,
+      model: modelName,
+      inputs: inputText,
+      parameters: {
+          max_new_tokens: 2000,
+          return_full_text: false    
+      },
+  });
+
+  const generatedText = res.generated_text;
+
+  try {
+      // Remove the "Generated text:" label if present
+      const jsonString = generatedText.replace(/^Generated text:\s*/, '');
+
+      // Parse the JSON string into a JavaScript object
+      const suggestions = JSON.parse(jsonString);
+
+      console.log('Generated AP Style suggestions:', suggestions);
+
+      return suggestions;
+  } catch (error) {
+      console.error('Error parsing JSON:', error);
+      return null;
+  }
+};
 
