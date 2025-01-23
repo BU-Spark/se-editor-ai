@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  margin: -19px 0 0 0; /*-19px here to remove white space on the very top of the page*/
+  width: 100%;  
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: -25px;
+  overflow: hidden
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+.font-poppins {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.fullBackground {
+  background-color: #F5F0EF; 
+  min-height: 100vh;
+}
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.font-newsreader {
+  font-family: "Newsreader", serif;
+}
+
+.normal-font{
+  font-weight: 400;
+}
+
+.bold-font{
+  font-weight: 700;
+}
+.placeholder-color::placeholder {
+  color: #31302F;
+}
+
+.placeholder-text::placeholder {
+  font-family: 'Poppins';
+}
+
+.custom-border-color {
+  border-color: #801212
+}
+
+.custom-border-opacity {
+  background-color: rgba(128, 18, 18, 0.06); 
+}
+
+.large-font {
+    font-size: 55px;
+  }
+
+.rounded-search-bar {
+  border-radius: 20px;
+  padding: 5px;
+}
+
+.ql-editor {
+  background-color: white !important;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 60px;
+  aspect-ratio: 2;
+  --_g: no-repeat radial-gradient(circle closest-side,#801212 90%,#0000);
+  background: 
+    var(--_g) 0%   50%,
+    var(--_g) 50%  50%,
+    var(--_g) 100% 50%;
+  background-size: calc(100%/3) 50%;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+    20%{background-position:0%   0%, 50%  50%,100%  50%}
+    40%{background-position:0% 100%, 50%   0%,100%  50%}
+    60%{background-position:0%  50%, 50% 100%,100%   0%}
+    80%{background-position:0%  50%, 50%  50%,100% 100%}
+}
+
+form {
+  padding: 10px 20px;
+  background-color: white;
+  border-radius: 4px;
+  }
